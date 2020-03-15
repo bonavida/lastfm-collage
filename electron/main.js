@@ -7,12 +7,23 @@ const dev = process.env.NODE_ENV === 'development';
 // Keep a global reference of the window object
 let win = null;
 
+const installExtensions = async () => {
+  const installer = require('electron-devtools-installer'); // eslint-disable-line import/no-extraneous-dependencies
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+
+  return Promise.all(
+    extensions.map(name => installer.default(installer[name], forceDownload))
+  );
+};
+
 const createWindow = () => {
   win = new BrowserWindow({
     width: 900,
     height: 680,
     transparent: false,
     webPreferences: {
+      devTools: dev,
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -28,22 +39,17 @@ const createWindow = () => {
 
   win.loadURL(startUrl);
 
-  if (dev) {
-    win.webContents.once('dom-ready', () => {
-      win.webContents.openDevTools();
-    });
-  } else {
-    win.webContents.on('devtools-opened', () => {
-      win.webContents.closeDevTools();
-    });
-  }
-
   win.on('closed', () => {
     win = null;
   });
 };
 
-app.on('ready', createWindow);
+app.on('ready', async () => {
+  if (dev) {
+    await installExtensions();
+  }
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
