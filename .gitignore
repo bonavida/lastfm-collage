@@ -11,6 +11,19 @@
 # production
 /build
 
+# electron
+/dist
+
+# IDEs and editors
+./idea
+.vscode/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
 # misc
 .DS_Store
 .env.local
@@ -21,3 +34,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# env files
+.env

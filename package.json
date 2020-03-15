@@ -1,8 +1,48 @@
 {
   "name": "lastfm-collage",
+  "description": "A React & Electron app that creates a collage with the cover art of your favourite albums in lastfm",
   "version": "0.1.0",
-  "private": true,
+  "main": "electron/main.js",
+  "homepage": "./",
+  "author": "Diego Bonavida <gecko.bona@gmail.com>",
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "eslint ./**/*.{ts,tsx,js,jsx}",
+    "lint:fix": "eslint --fix ./**/*.{ts,tsx,js,jsx}",
+    "prettify": "prettier --config ./.prettierrc.json --write \"./**/*.{ts,tsx,js,jsx}\"",
+    "electron:start": "electron .",
+    "electron": "cross-env NODE_ENV=development ELECTRON_START_URL=http://localhost:3000 nodemon --watch . --exec 'npm run electron:start'",
+    "electron:local": "npm run electron:start",
+    "preDist": "rimraf dist && npm run build",
+    "dist:all": "npm run preDist && electron-builder -mwl",
+    "dist:win": "npm run preDist  && electron-builder -w --x64",
+    "dist:linux": "npm run preDist && electron-builder -l",
+    "dist:osx": "npm run preDist && electron-builder -m"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bonavida/lastfm-collage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bonavida/lastfm-collage/issues"
+  },
+  "keywords": [
+    "react",
+    "electron",
+    "typescript",
+    "lastfm",
+    "collage",
+    "music",
+    "cover-art",
+    "desktop",
+    "create-react-app"
+  ],
   "dependencies": {
+    "@reduxjs/toolkit": "^1.2.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -10,20 +50,74 @@
     "@types/node": "^12.12.29",
     "@types/react": "^16.9.23",
     "@types/react-dom": "^16.9.5",
-    "node-sass": "^4.13.1",
+    "axios": "^0.19.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "typescript": "^3.7.5"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "electron": "^8.1.1",
+    "electron-builder": "^22.4.1",
+    "electron-devtools-installer": "^2.2.4",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "node-sass": "^4.13.1",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.2"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "build": {
+    "productName": "Lastfm Collage",
+    "appId": "bonavida.lastfm-collage.org",
+    "electronVersion": "8.1.1",
+    "extends": null,
+    "files": [
+      "build/**/*",
+      "electron/*.js"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "electron/build"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage"
+      ],
+      "category": "public.app.category.audio"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.music"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 125,
+          "y": 225
+        },
+        {
+          "x": 415,
+          "y": 225,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [
