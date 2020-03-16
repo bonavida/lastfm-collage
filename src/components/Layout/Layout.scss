@@ -1,0 +1,32 @@
+.layout {
+  &__container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header,
+  &__footer {
+    height: 48px;
+  }
+
+  &__header {
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 5px;
+    background: #e31b23 linear-gradient(#e31b23, #b32024);
+    border: 1px solid #a00;
+    border-bottom: 1px solid #9f081e;
+  }
+
+  &__footer {
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0px 10px;
+    background: #e31b23 linear-gradient(#b32024, #e31b23);
+    border: 1px solid #a00;
+    border-top: 1px solid #9f081e;
+  }
+
+  &__content {
+    flex: 1;
+  }
+}
