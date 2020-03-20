@@ -1,0 +1,23 @@
+@import 'styles/utils.scss';
+
+.footer {
+  &__container {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $color-text-black-base;
+    font-family: $font-secondary;
+    font-size: $font-size-s;
+    text-shadow: $text-shadow-white-base;
+    background-color: $color-text-white-darker-1;
+  }
+
+  &__year {
+    &::before {
+      content: '\00a9';
+      margin: 0 $margin-s;
+    }
+  }
+
+}

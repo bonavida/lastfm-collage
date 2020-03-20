@@ -1,0 +1,22 @@
+@import 'styles/utils.scss';
+
+.header {
+  &__container {
+    height: 85px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xs $spacing-m;
+    color: $color-text-white-base;
+    box-shadow: $box-shadow-header;
+    background: $color-primary linear-gradient($color-primary, $color-primary-dark);
+    border: 1px solid $border-color-primary;
+    border-bottom: 1px solid $border-color-primary-dark;
+  }
+  &__title {
+    margin: 0;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    user-select: none;
+  }
+}
