@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -15,6 +15,16 @@ const installExtensions = async () => {
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
   );
+};
+
+const isSafeishURL = externalUrl =>
+  externalUrl.startsWith('http:') || externalUrl.startsWith('https:');
+
+const handleOpenUrl = (event, externalUrl) => {
+  event.preventDefault();
+  if (isSafeishURL(externalUrl)) {
+    shell.openExternal(externalUrl);
+  }
 };
 
 const createWindow = () => {
@@ -38,6 +48,9 @@ const createWindow = () => {
     });
 
   win.loadURL(startUrl);
+
+  win.webContents.on('will-navigate', handleOpenUrl);
+  win.webContents.on('new-window', handleOpenUrl);
 
   win.on('closed', () => {
     win = null;
