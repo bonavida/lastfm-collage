@@ -1,0 +1,34 @@
+@import 'styles/utils.scss';
+
+.button {
+  display: inline-block;
+  font-size: $font-size-m;
+  font-weight: $font-weight-regular;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  color: $color-text-white-base;
+  background-color: $color-primary;
+  border: 1px solid transparent;
+  padding: $padding-s $padding-l;
+  line-height: $line-height-m;
+  border-radius: $border-radius-regular;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:hover {
+    background-color: $color-primary-dark;
+    border-color: $border-color-primary-dark;
+  }
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: 0;
+    text-decoration: none;
+    box-shadow: $box-shadow-primary-button;
+  }
+}

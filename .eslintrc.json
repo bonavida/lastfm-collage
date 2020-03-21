@@ -29,6 +29,12 @@
     "react/jsx-filename-extension": 0,
     "import/no-unresolved": "off",
     "import/extensions": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
     "spaced-comment": [
       "error",
       "always",

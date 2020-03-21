@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Button> Snapshot renders => it should be rendered with the provided props 1`] = `
+<div>
+  <button
+    class="button externalClassName"
+    type="button"
+  >
+    <span>
+      Button test
+    </span>
+  </button>
+</div>
+`;

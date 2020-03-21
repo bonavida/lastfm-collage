@@ -1,12 +1,13 @@
 /** TYPOGRAPHY */
 
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900&display=swap');
 
 // Font families
 $font-primary: 'Raleway', sans-serif;
 $font-secondary: "Lucida Grande", Arial, Helvetica, Verdana, sans-serif;
 
 // Font weights
+$font-weight-light: 400;
 $font-weight-regular: 500;
 $font-weight-semi-bold: 600;
 $font-weight-bold: 700;
@@ -22,6 +23,16 @@ $font-size-ml: 20px;
 $font-size-l: 24px;
 $font-size-xl: 36px;
 $font-size-xxl: 48px;
+
+// Line heights
+$line-height-m: 1.5;
+
+// Letter spacings
+$letter-spacing-zero: 0;
+$letter-spacing-s: 0.36px;
+$letter-spacing-m: 0.76px;
+$letter-spacing-l: 1.25px;
+$letter-spacing-xl: 1.76px;
 
 /** COLORS */
 
@@ -61,10 +72,24 @@ $margin-m: 10px;
 $margin-l: 15px;
 $margin-xl: 20px;
 
+$padding-s: 5px;
+$padding-sm: 8px;
+$padding-m: 10px;
+$padding-l: 15px;
+$padding-xl: 24px;
+
+
 /** ELEVATION **/
 
 // Box shadows
 $box-shadow-header: rgba(0, 0, 0, 0.3) 0 2px 5px;
+$box-shadow-primary-button: 0 0 0 0.2rem rgba(220,53,69,.5);
 
 // Text shadows
 $text-shadow-white-base: $color-text-white-base 0 1px 0;
+
+
+/** MISC */
+
+$border-radius-regular: 4px;
+$border-radius-rounded: 500px;

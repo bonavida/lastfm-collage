@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, nativeImage } = require('electron');
 const path = require('path');
 const url = require('url');
 
@@ -8,7 +8,7 @@ const dev = process.env.NODE_ENV === 'development';
 let win = null;
 
 const installExtensions = async () => {
-  const installer = require('electron-devtools-installer'); // eslint-disable-line import/no-extraneous-dependencies
+  const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
@@ -28,10 +28,14 @@ const handleOpenUrl = (event, externalUrl) => {
 };
 
 const createWindow = () => {
+  console.log(path.join(__dirname, 'electron', 'build', 'icons', '32x32.png'));
   win = new BrowserWindow({
     width: 900,
     height: 680,
     transparent: false,
+    icon: nativeImage.createFromPath(
+      path.join(__dirname, 'build', 'icons', '32x32.png')
+    ),
     webPreferences: {
       devTools: dev,
       nodeIntegration: false,
