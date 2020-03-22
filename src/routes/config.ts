@@ -1,24 +1,22 @@
 import Login from 'pages/Login';
+import Main from 'pages/Main';
 
 const routes = [
   {
     id: 1,
-    path: '/',
-    RouteComponent: Login,
+    path: '/login',
     exact: true,
+    RouteComponent: Login,
   },
-  //   {
-  //     id: 2,
-  //     path: '/cart',
-  //     RouteComponent: CartPage,
-  //     exact: true,
-  //   },
-  //   {
-  //     id: 3,
-  //     path: '/collage',
-  //     RouteComponent: CartPage,
-  //     exact: true,
-  //   },
 ];
 
-export { routes };
+const protectedRoutes = [
+  {
+    id: 1,
+    path: '/',
+    exact: true,
+    RouteComponent: Main,
+  },
+];
+
+export { routes, protectedRoutes };
