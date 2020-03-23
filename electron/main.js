@@ -2,6 +2,7 @@ const { app, BrowserWindow, shell, nativeImage } = require('electron');
 const path = require('path');
 const url = require('url');
 
+const LASTM_AUTH_URL = 'https://www.last.fm/api/auth';
 const dev = process.env.NODE_ENV === 'development';
 
 // Keep a global reference of the window object
@@ -20,15 +21,17 @@ const installExtensions = async () => {
 const isSafeishURL = externalUrl =>
   externalUrl.startsWith('http:') || externalUrl.startsWith('https:');
 
+const isAuthenticationUrl = externalUrl =>
+  externalUrl.startsWith(LASTM_AUTH_URL);
+
 const handleOpenUrl = (event, externalUrl) => {
-  event.preventDefault();
-  if (isSafeishURL(externalUrl)) {
+  if (isSafeishURL(externalUrl) && !isAuthenticationUrl(externalUrl)) {
+    event.preventDefault();
     shell.openExternal(externalUrl);
   }
 };
 
 const createWindow = () => {
-  console.log(path.join(__dirname, 'electron', 'build', 'icons', '32x32.png'));
   win = new BrowserWindow({
     width: 900,
     height: 680,
