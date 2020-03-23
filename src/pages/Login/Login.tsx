@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 /** Services */
-import { login } from 'services/auth';
+import { login, getSession } from 'services/auth';
 /** Components */
 import Button from 'components/Button';
 /** Types */
 import { RootState } from 'store';
 import { setTokenAction, AuthSliceState } from 'context/auth';
+/** Utils */
+import { retrieveLastfmToken, generateApiSignature } from 'utils';
 /** Styles */
 import './Login.scss';
 
@@ -17,17 +19,26 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   useEffect(() => {
     if (window.location.search) {
-      const searchParams = new URLSearchParams(window.location.search);
-      const _token = searchParams.get('token');
+      const _token = retrieveLastfmToken(window.location.search);
       _token && dispatch(setTokenAction(_token));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
+    const getSessionKey = async (apiSig: string) => {
+      try {
+        const res = await getSession(token, apiSig);
+        console.log(res);
+        history.push('/');
+      } catch (e) {
+        console.error(e);
+      }
+    };
     if (token) {
-      history.push('/');
+      const apiSig = generateApiSignature(token);
+      getSessionKey(apiSig);
     }
-  }, [token]);
+  }, [token, history]);
 
   const loginHandler = () => {
     login();

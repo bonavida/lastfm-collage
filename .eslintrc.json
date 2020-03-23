@@ -70,7 +70,9 @@
     "@typescript-eslint/no-unused-vars": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-member-accessibility": 0,
-    "@typescript-eslint/no-angle-bracket-type-assertion": 0
+    "@typescript-eslint/no-angle-bracket-type-assertion": 0,
+    "camelcase": "off",
+    "@typescript-eslint/camelcase": ["error", { "properties": "never" }]
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
