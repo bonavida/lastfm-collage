@@ -20,13 +20,19 @@ const ProtectedRoute = ({
   exact,
   component: Component,
 }: ProtectedRouteProps) => {
-  const { token } = useSelector<RootState, AuthSliceState>(state => state.auth);
+  const { session } = useSelector<RootState, AuthSliceState>(
+    state => state.auth
+  );
   return (
     <Route
       path={path}
       exact={exact}
       render={(props: RouteComponentProps) =>
-        token ? <Component {...props} /> : <Redirect to="/login" />
+        session && session.key ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );

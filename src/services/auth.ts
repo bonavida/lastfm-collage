@@ -24,5 +24,5 @@ export const getSession = (token: string, apiSig: string) => {
     api_sig: apiSig,
     format: 'json',
   };
-  return http.get(`${apiUrl}`, { params }).then(res => res.data);
+  return http.get(`${apiUrl}`, { params }).then(res => res.data.session);
 };

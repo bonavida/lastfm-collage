@@ -5,12 +5,14 @@ import { RootState } from 'store';
 import { AuthSliceState } from 'context/auth';
 
 const Main = () => {
-  const { token } = useSelector<RootState, AuthSliceState>(state => state.auth);
+  const { session } = useSelector<RootState, AuthSliceState>(
+    state => state.auth
+  );
 
   return (
     <div>
       <div>Main</div>
-      {token && <span>isAuthenticated!</span>}
+      {session.key && <span>isAuthenticated!</span>}
     </div>
   );
 };
