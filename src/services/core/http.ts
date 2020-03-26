@@ -7,6 +7,7 @@ axios.interceptors.response.use(undefined, (error: AxiosError) => {
     error.response.status < 500;
 
   if (!expectedError) {
+    console.log('hey!');
     console.error(error);
   }
 

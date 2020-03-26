@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { unwrapResult } from '@reduxjs/toolkit';
 /** Services */
 import { login } from 'services/auth';
 /** Components */
 import Button from 'components/Button';
-/** Types */
+/** Types and Actions */
 import { RootState } from 'store';
 import { AuthSliceState, setTokenAction, fetchSession } from 'context/auth';
 /** Utils */
-import { retrieveLastfmToken, generateApiSignature } from 'utils';
+import { retrieveLastfmToken } from 'utils';
 /** Styles */
 import './Login.scss';
 
@@ -29,24 +28,18 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    const getSession = async (apiSig: string) => {
+    const getSession = async () => {
       try {
-        dispatch(fetchSession(apiSig));
+        await dispatch(fetchSession());
+        history.push('/');
       } catch (e) {
         console.error(e);
       }
     };
     if (token) {
-      const apiSig = generateApiSignature(token);
-      getSession(apiSig);
+      getSession();
     }
-  }, [token]);
-
-  useEffect(() => {
-    if (session.key) {
-      history.push('/');
-    }
-  }, [session.key, history]);
+  }, [token, dispatch, history]);
 
   const loginHandler = () => {
     login();

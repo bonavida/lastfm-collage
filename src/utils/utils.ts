@@ -1,4 +1,5 @@
 import * as crypto from 'crypto';
+/** Config */
 import { lastfm } from 'config';
 
 /**
@@ -24,14 +25,16 @@ export const md5 = (contents: string) =>
  * Sign your authenticated calls by first ordering the parameters sent in your call
  * alphabetically by parameter name and concatenating them into one string using
  * a <name><value> scheme. You must not include the format and callback parameters.
- * So for a call to auth.getSession you may have:
- *        api_keyxxxxxxxxxxmethodauth.getSessiontokenyyyyyy
+ *
  * Then append your secret to this string. Finally, generate an md5 hash of the resulting string.
  */
-export const generateApiSignature = (token: string) => {
+export const generateApiSignature = (params: Record<string, string>) => {
   const {
-    auth: { apiKey, sharedSecret },
+    auth: { sharedSecret },
   } = lastfm;
-  const partialApiSig = `api_key${apiKey}methodauth.getSessiontoken${token}${sharedSecret}`;
+  const paramKeysSig = Object.keys(params)
+    .sort()
+    .reduce((acc: string, key: string) => `${acc}${key}${params[key]}`, '');
+  const partialApiSig = `${paramKeysSig}${sharedSecret}`;
   return md5(partialApiSig);
 };

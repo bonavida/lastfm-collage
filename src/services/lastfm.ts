@@ -1,32 +1,21 @@
 /** Config */
 import { lastfm } from 'config';
 /** Types */
-import { Session } from 'models/auth';
+import { User } from 'models/user';
 /** Utils */
 import { generateApiSignature } from 'utils';
 /** Modules */
 import http from './core/http';
 
-export const login = () => {
-  const {
-    authUrl,
-    auth: { apiKey },
-  } = lastfm;
-  if (authUrl && apiKey) {
-    const url = `${authUrl}/?api_key=${apiKey}`;
-    window.location.href = url;
-  }
-};
-
-export const getSession = (token: string) => {
+export const getUser = (sessionKey: string) => {
   const {
     apiUrl,
     auth: { apiKey },
   } = lastfm;
   const authParams = {
-    method: 'auth.getSession',
-    token,
+    method: 'user.getinfo',
     api_key: apiKey,
+    sk: sessionKey,
   };
   const apiSig = generateApiSignature(authParams);
   const params = {
@@ -35,6 +24,6 @@ export const getSession = (token: string) => {
     format: 'json',
   };
   return http
-    .get<{ session: Session }>(`${apiUrl}`, { params })
-    .then(res => res.data.session);
+    .get<{ user: User }>(`${apiUrl}`, { params })
+    .then(res => res.data.user);
 };

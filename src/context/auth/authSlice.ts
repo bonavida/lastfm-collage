@@ -8,12 +8,7 @@ import {
 import { getSession } from 'services/auth';
 /** Types */
 import { RootState } from 'store';
-
-export type Session = {
-  subscriber?: number;
-  name?: string;
-  key?: string;
-};
+import { Session } from 'models/auth';
 
 export type AuthSliceState = {
   token: string;
@@ -29,11 +24,11 @@ const initialState: AuthSliceState = {
 
 export const fetchSession = createAsyncThunk<
   Session,
-  string,
+  void,
   { state: RootState }
->('auth/fetchSession', async (apiSig, { getState }) => {
+>('auth/fetchSession', async (_, { getState }) => {
   const { token } = getState().auth;
-  const session = await getSession(token, apiSig);
+  const session = await getSession(token);
   return session as Session;
 });
 
@@ -44,10 +39,10 @@ const authSlice = createSlice({
     setToken: (state: AuthSliceState, action: PayloadAction<string>) => {
       localStorage.setItem('token', action.payload);
       state.token = action.payload;
-      state.authPending = true;
     },
     clearAuth: (state: AuthSliceState) => {
       localStorage.removeItem('token');
+      localStorage.removeItem('apiSig');
       localStorage.removeItem('session');
       state.token = '';
       state.session = {};
@@ -89,6 +84,10 @@ export const setTokenAction = (token: string) => async (dispatch: Dispatch) => {
   dispatch(setToken(token));
 };
 
+export const clearAuthAction = () => async (dispatch: Dispatch) => {
+  dispatch(clearAuth());
+};
+
 /**
 
 export const logoutAction = () => async dispatch => {
@@ -97,7 +96,4 @@ export const logoutAction = () => async dispatch => {
   dispatch(resetDevices());
 };
 
-export const clearTokenAction = () => async dispatch => {
-  dispatch(clearToken());
-};
 */

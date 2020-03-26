@@ -1,15 +1,12 @@
-import {
-  configureStore,
-  combineReducers,
-  Action,
-  Reducer,
-} from '@reduxjs/toolkit';
+import { configureStore, combineReducers, Action } from '@reduxjs/toolkit';
 import { ThunkAction } from 'redux-thunk';
 // Wrap in Context
 import auth from 'context/auth';
+import user from 'context/user';
 
 const rootReducer = combineReducers({
   auth,
+  user,
 });
 
 const store = configureStore({
