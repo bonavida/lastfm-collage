@@ -1,7 +1,8 @@
 /** Config */
 import { lastfm } from 'config';
 /** Types */
-import { User } from 'models/user';
+import { AuthParams } from 'models/auth';
+import { User, Filters, Album } from 'models/lastfm';
 /** Utils */
 import { generateApiSignature } from 'utils';
 /** Modules */
@@ -12,7 +13,7 @@ export const getUser = (sessionKey: string) => {
     apiUrl,
     auth: { apiKey },
   } = lastfm;
-  const authParams = {
+  const authParams: AuthParams = {
     method: 'user.getinfo',
     api_key: apiKey,
     sk: sessionKey,
@@ -26,4 +27,31 @@ export const getUser = (sessionKey: string) => {
   return http
     .get<{ user: User }>(`${apiUrl}`, { params })
     .then(res => res.data.user);
+};
+
+export const getUserTopAlbums = (
+  username: string | undefined,
+  sessionKey: string | undefined,
+  filters: Filters
+) => {
+  const {
+    apiUrl,
+    auth: { apiKey },
+  } = lastfm;
+  const signatureParams = {
+    method: 'user.gettopalbums',
+    user: username,
+    api_key: apiKey,
+    sk: sessionKey,
+    ...filters,
+  };
+  const apiSig = generateApiSignature(signatureParams);
+  const params = {
+    ...signatureParams,
+    api_sig: apiSig,
+    format: 'json',
+  };
+  return http
+    .get<{ topalbums: { album: Album[] } }>(`${apiUrl}`, { params })
+    .then(res => res.data.topalbums);
 };

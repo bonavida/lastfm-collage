@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { AuthSliceState } from 'context/auth';
 import { fetchUser, UserSliceState } from 'context/user';
+import { fetchTopAlbums } from 'context/albums';
 
 const Main = () => {
   const { session } = useSelector<RootState, AuthSliceState>(
@@ -13,8 +14,12 @@ const Main = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const getUser = async () => {
+      await dispatch(fetchUser());
+      await dispatch(fetchTopAlbums());
+    };
     if (session.key) {
-      dispatch(fetchUser());
+      getUser();
     }
   }, [session.key]);
 

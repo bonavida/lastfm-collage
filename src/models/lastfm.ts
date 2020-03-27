@@ -24,3 +24,24 @@ export type User = {
   bootstrap?: number;
   registered?: RegisterTime;
 };
+
+export type Filters = {
+  period?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type Artist = {
+  name?: string;
+  mbid?: string;
+  url?: string;
+};
+
+export type Album = {
+  name?: string;
+  playcount?: number;
+  mbid?: string;
+  url?: string;
+  artist?: Artist;
+  image?: Image[];
+};

@@ -2,9 +2,8 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 /** Services */
 import { getUser } from 'services/lastfm';
 /** Types */
-import { User } from 'models/user';
+import { User } from 'models/lastfm';
 /** Actions */
-import { clearAuthAction } from 'context/auth';
 import { RootState } from 'store';
 
 export type UserSliceState = {

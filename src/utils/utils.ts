@@ -28,7 +28,9 @@ export const md5 = (contents: string) =>
  *
  * Then append your secret to this string. Finally, generate an md5 hash of the resulting string.
  */
-export const generateApiSignature = (params: Record<string, string>) => {
+export const generateApiSignature = (
+  params: Record<string, string | number | undefined>
+) => {
   const {
     auth: { sharedSecret },
   } = lastfm;
