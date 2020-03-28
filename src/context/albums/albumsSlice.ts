@@ -24,15 +24,13 @@ export const fetchTopAlbums = createAsyncThunk<
   const {
     session: { key: sessionKey },
   } = getState().auth;
-  const {
-    user: { name: username },
-  } = getState().user;
+  const { name: username } = getState().user;
   const topalbums = await getUserTopAlbums(username, sessionKey, {});
   return topalbums.album as Album[];
 });
 
 const albumsSlice = createSlice({
-  name: 'user',
+  name: 'albums',
   initialState,
   reducers: {
     clearAlbums: () => initialState,

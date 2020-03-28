@@ -10,7 +10,7 @@ const Main = () => {
   const { session } = useSelector<RootState, AuthSliceState>(
     state => state.auth
   );
-  const { user } = useSelector<RootState, UserSliceState>(state => state.user);
+  const { name } = useSelector<RootState, UserSliceState>(state => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Main = () => {
   return (
     <div>
       <div>Main</div>
-      {user.name && <span>{user.name}</span>}
+      {name && <span>{name}</span>}
     </div>
   );
 };

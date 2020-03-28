@@ -5,14 +5,22 @@ import { getUser } from 'services/lastfm';
 import { User } from 'models/lastfm';
 /** Actions */
 import { RootState } from 'store';
+/** Utils */
+import { getLargestImage } from 'utils';
 
 export type UserSliceState = {
-  user: User;
+  name: string;
+  realname: string;
+  url: string;
+  image: string;
   loading: boolean;
 };
 
 const initialState: UserSliceState = {
-  user: {},
+  name: '',
+  realname: '',
+  url: '',
+  image: '',
   loading: false,
 };
 
@@ -39,15 +47,22 @@ const userSlice = createSlice({
     });
     builder.addCase(
       fetchUser.fulfilled,
-      (state: UserSliceState, action: PayloadAction<User>) => {
-        state.user = action.payload;
-        state.loading = false;
+      (state: UserSliceState, { payload: { name, realname, url, image } }) => {
+        const largestImage = getLargestImage(image);
+        return {
+          ...state,
+          name,
+          realname,
+          url,
+          image: largestImage['#text'] || '',
+          loading: false,
+        };
       }
     );
-    builder.addCase(fetchUser.rejected, (state: UserSliceState) => {
-      state.user = {};
-      state.loading = false;
-    });
+    builder.addCase(
+      fetchUser.rejected,
+      (state: UserSliceState) => initialState
+    );
   },
 });
 

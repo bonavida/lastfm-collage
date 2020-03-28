@@ -1,4 +1,4 @@
-type Image = {
+export type Image = {
   size: string;
   '#text': string;
 };
@@ -9,20 +9,20 @@ type RegisterTime = {
 };
 
 export type User = {
-  id?: number;
-  type?: string;
-  name?: string;
-  realname?: string;
-  url?: string;
-  image?: Image[];
-  country?: string;
-  age?: number;
-  gender?: string;
-  subscriber?: number;
-  playcount?: number;
-  playlists?: number;
-  bootstrap?: number;
-  registered?: RegisterTime;
+  id: number;
+  type: string;
+  name: string;
+  realname: string;
+  url: string;
+  image: Image[];
+  country: string;
+  age: number;
+  gender: string;
+  subscriber: number;
+  playcount: number;
+  playlists: number;
+  bootstrap: number;
+  registered: RegisterTime;
 };
 
 export type Filters = {

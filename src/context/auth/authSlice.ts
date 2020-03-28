@@ -42,7 +42,6 @@ const authSlice = createSlice({
     },
     clearAuth: (state: AuthSliceState) => {
       localStorage.removeItem('token');
-      localStorage.removeItem('apiSig');
       localStorage.removeItem('session');
       state.token = '';
       state.session = {};

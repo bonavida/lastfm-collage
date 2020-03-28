@@ -1,6 +1,15 @@
 import * as crypto from 'crypto';
 /** Config */
 import { lastfm } from 'config';
+/** Types */
+import { Image } from 'models/lastfm';
+
+const imageWeight: Record<string, number> = {
+  small: 0,
+  medium: 1,
+  large: 2,
+  extralarge: 3,
+};
 
 /**
  * Retrieves the last.fm token from the URL query params
@@ -40,3 +49,10 @@ export const generateApiSignature = (
   const partialApiSig = `${paramKeysSig}${sharedSecret}`;
   return md5(partialApiSig);
 };
+
+export const getLargestImage = (images: Image[] = []) =>
+  images.reduce(
+    (prev: Image, curr: Image) =>
+      imageWeight[prev.size] > imageWeight[curr.size] ? prev : curr,
+    {} as Image
+  );
