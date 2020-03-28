@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 /** Types and Actions */
 import { RootState } from 'store';
 import { AuthSliceState } from 'context/auth';
-import { fetchUser, UserSliceState } from 'context/user';
+import { fetchUser } from 'context/user';
 import { fetchTopAlbums } from 'context/albums';
 
 const Main = () => {
   const { sessionKey } = useSelector<RootState, AuthSliceState>(
     state => state.auth
   );
-  const { name } = useSelector<RootState, UserSliceState>(state => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,12 +22,7 @@ const Main = () => {
     }
   }, [sessionKey]);
 
-  return (
-    <div>
-      <div>Main</div>
-      {name && <span>{name}</span>}
-    </div>
-  );
+  return <div>Main</div>;
 };
 
 export default Main;
