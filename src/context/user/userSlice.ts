@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 /** Services */
 import { getUser } from 'services/lastfm';
 /** Types */
@@ -27,9 +27,7 @@ const initialState: UserSliceState = {
 export const fetchUser = createAsyncThunk<User, void, { state: RootState }>(
   'user/fetchUser',
   async (_, { getState }) => {
-    const {
-      session: { key: sessionKey },
-    } = getState().auth;
+    const { sessionKey } = getState().auth;
     const user = await getUser(sessionKey || '');
     return user as User;
   }

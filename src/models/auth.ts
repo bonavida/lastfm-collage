@@ -1,12 +1,12 @@
 export type Session = {
-  subscriber?: number;
-  name?: string;
-  key?: string;
+  subscriber: number;
+  name: string;
+  key: string;
 };
 
 export type AuthParams = {
-  method?: string;
+  method: string;
+  api_key: string;
   token?: string;
-  api_key?: string;
   sk?: string;
 };

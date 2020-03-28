@@ -7,7 +7,7 @@ import { fetchUser, UserSliceState } from 'context/user';
 import { fetchTopAlbums } from 'context/albums';
 
 const Main = () => {
-  const { session } = useSelector<RootState, AuthSliceState>(
+  const { sessionKey } = useSelector<RootState, AuthSliceState>(
     state => state.auth
   );
   const { name } = useSelector<RootState, UserSliceState>(state => state.user);
@@ -18,10 +18,10 @@ const Main = () => {
       await dispatch(fetchUser());
       await dispatch(fetchTopAlbums());
     };
-    if (session.key) {
+    if (sessionKey) {
       getUser();
     }
-  }, [session.key]);
+  }, [sessionKey]);
 
   return (
     <div>

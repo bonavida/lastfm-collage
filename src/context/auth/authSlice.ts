@@ -12,14 +12,14 @@ import { Session } from 'models/auth';
 
 export type AuthSliceState = {
   token: string;
-  session: Session;
-  authPending: boolean;
+  sessionKey: string;
+  loading: boolean;
 };
 
 const initialState: AuthSliceState = {
   token: localStorage.getItem('token') || '',
-  session: JSON.parse(localStorage.getItem('session') || '{}'),
-  authPending: false,
+  sessionKey: localStorage.getItem('sessionKey') || '',
+  loading: false,
 };
 
 export const fetchSession = createAsyncThunk<
@@ -42,35 +42,35 @@ const authSlice = createSlice({
     },
     clearAuth: (state: AuthSliceState) => {
       localStorage.removeItem('token');
-      localStorage.removeItem('session');
+      localStorage.removeItem('sessionKey');
       state.token = '';
-      state.session = {};
-      state.authPending = false;
+      state.sessionKey = '';
+      state.loading = false;
     },
     logout: (state: AuthSliceState) => {
       state.token = '';
-      state.session = {};
-      state.authPending = false;
+      state.sessionKey = '';
+      state.loading = false;
     },
   },
   extraReducers: builder => {
     builder.addCase(fetchSession.pending, (state: AuthSliceState) => {
-      state.authPending = true;
+      state.loading = true;
     });
     builder.addCase(
       fetchSession.fulfilled,
-      (state: AuthSliceState, action: PayloadAction<Session>) => {
-        localStorage.setItem('session', JSON.stringify(action.payload));
-        state.session = action.payload;
-        state.authPending = false;
+      (state: AuthSliceState, { payload: { key } }) => {
+        localStorage.setItem('sessionKey', key);
+        state.sessionKey = key;
+        state.loading = false;
       }
     );
     builder.addCase(fetchSession.rejected, (state: AuthSliceState) => {
       localStorage.removeItem('token');
       localStorage.removeItem('session');
       state.token = '';
-      state.session = {};
-      state.authPending = false;
+      state.sessionKey = '';
+      state.loading = false;
     });
   },
 });

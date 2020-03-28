@@ -14,10 +14,9 @@ import { retrieveLastfmToken } from 'utils';
 import './Login.scss';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
-  const { token, session, authPending } = useSelector<
-    RootState,
-    AuthSliceState
-  >(state => state.auth);
+  const { token, sessionKey, loading } = useSelector<RootState, AuthSliceState>(
+    state => state.auth
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,7 +46,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   return (
     <div className="login__container">
-      {!session.key && !authPending && (
+      {!sessionKey && !loading && (
         <>
           <span className="login__description">
             <p>
@@ -67,7 +66,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
           </Button>
         </>
       )}
-      {authPending && 'Loading...'}
+      {loading && 'Loading...'}
     </div>
   );
 };

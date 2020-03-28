@@ -21,9 +21,7 @@ export const fetchTopAlbums = createAsyncThunk<
   void,
   { state: RootState }
 >('albums/fetchTopAlbums', async (_, { getState }) => {
-  const {
-    session: { key: sessionKey },
-  } = getState().auth;
+  const { sessionKey } = getState().auth;
   const { name: username } = getState().user;
   const topalbums = await getUserTopAlbums(username, sessionKey, {});
   return topalbums.album as Album[];

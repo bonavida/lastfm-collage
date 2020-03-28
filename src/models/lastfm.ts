@@ -32,16 +32,16 @@ export type Filters = {
 };
 
 export type Artist = {
-  name?: string;
-  mbid?: string;
-  url?: string;
+  name: string;
+  mbid: string;
+  url: string;
 };
 
 export type Album = {
-  name?: string;
-  playcount?: number;
-  mbid?: string;
-  url?: string;
-  artist?: Artist;
-  image?: Image[];
+  name: string;
+  playcount: number;
+  mbid: string;
+  url: string;
+  artist: Artist;
+  image: Image[];
 };
