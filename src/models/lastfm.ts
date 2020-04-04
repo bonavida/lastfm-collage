@@ -8,7 +8,7 @@ type RegisterTime = {
   '#text': number;
 };
 
-export type User = {
+export type ResponseUser = {
   id: number;
   type: string;
   name: string;
@@ -31,17 +31,17 @@ export type Filters = {
   page?: number;
 };
 
-export type Artist = {
+export type ResponseArtist = {
   name: string;
   mbid: string;
   url: string;
 };
 
-export type Album = {
+export type ResponseAlbum = {
   name: string;
   playcount: number;
   mbid: string;
   url: string;
-  artist: Artist;
+  artist: ResponseArtist;
   image: Image[];
 };

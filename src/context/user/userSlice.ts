@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 /** Services */
 import { getUser } from 'services/lastfm';
 /** Types */
-import { User } from 'models/lastfm';
+import { ResponseUser } from 'models/lastfm';
 /** Actions */
 import { RootState } from 'store';
 /** Utils */
@@ -24,14 +24,15 @@ const initialState: UserSliceState = {
   loading: false,
 };
 
-export const fetchUser = createAsyncThunk<User, void, { state: RootState }>(
-  'user/fetchUser',
-  async (_, { getState }) => {
-    const { sessionKey } = getState().auth;
-    const user = await getUser(sessionKey || '');
-    return user as User;
-  }
-);
+export const fetchUser = createAsyncThunk<
+  ResponseUser,
+  void,
+  { state: RootState }
+>('user/fetchUser', async (_, { getState }) => {
+  const { sessionKey } = getState().auth;
+  const user = await getUser(sessionKey || '');
+  return user as ResponseUser;
+});
 
 const userSlice = createSlice({
   name: 'user',

@@ -2,9 +2,12 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 /** Services */
 import { getUserTopAlbums } from 'services/lastfm';
 /** Types */
-import { Album } from 'models/lastfm';
+import { ResponseAlbum, Filters } from 'models/lastfm';
+import { Album } from 'models/album';
 /** Actions */
 import { RootState } from 'store';
+/** Utils */
+import { getLargestImage } from 'utils';
 
 export type AlbumsSliceState = {
   albums: Album[];
@@ -17,14 +20,14 @@ const initialState: AlbumsSliceState = {
 };
 
 export const fetchTopAlbums = createAsyncThunk<
-  Album[],
-  void,
+  ResponseAlbum[],
+  Filters,
   { state: RootState }
->('albums/fetchTopAlbums', async (_, { getState }) => {
+>('albums/fetchTopAlbums', async (filters: Filters, { getState }) => {
   const { sessionKey } = getState().auth;
   const { name: username } = getState().user;
-  const topalbums = await getUserTopAlbums(username, sessionKey, {});
-  return topalbums.album as Album[];
+  const topalbums = await getUserTopAlbums(username, sessionKey, filters);
+  return topalbums.album as ResponseAlbum[];
 });
 
 const albumsSlice = createSlice({
@@ -39,8 +42,12 @@ const albumsSlice = createSlice({
     });
     builder.addCase(
       fetchTopAlbums.fulfilled,
-      (state: AlbumsSliceState, action: PayloadAction<Album[]>) => {
-        state.albums = action.payload;
+      (state: AlbumsSliceState, action: PayloadAction<ResponseAlbum[]>) => {
+        state.albums = action.payload.map(album => ({
+          ...album,
+          artist: album.artist?.name,
+          image: getLargestImage(album.image)['#text'] || '',
+        }));
         state.loading = false;
       }
     );
