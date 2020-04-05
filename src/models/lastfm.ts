@@ -27,7 +27,7 @@ export type ResponseUser = {
 
 export type Filters = {
   period?: string;
-  limit?: number;
+  limit: number;
   page?: number;
 };
 
@@ -44,4 +44,17 @@ export type ResponseAlbum = {
   url: string;
   artist: ResponseArtist;
   image: Image[];
+};
+
+export type ResponseAlbumAttrs = {
+  page: string;
+  total: string;
+  user: string;
+  perPage: string;
+  totalPages: string;
+};
+
+export type ResponseTopAlbums = {
+  album: ResponseAlbum[];
+  '@attr': ResponseAlbumAttrs;
 };

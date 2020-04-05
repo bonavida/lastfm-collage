@@ -2,7 +2,8 @@ import * as crypto from 'crypto';
 /** Config */
 import { lastfm } from 'config';
 /** Types */
-import { Image } from 'models/lastfm';
+import { Image, ResponseAlbum } from 'models/lastfm';
+import { Album } from 'models/album';
 
 const imageWeight: Record<string, number> = {
   small: 0,
@@ -56,3 +57,12 @@ export const getLargestImage = (images: Image[] = []) =>
       imageWeight[prev.size] > imageWeight[curr.size] ? prev : curr,
     {} as Image
   );
+
+export const parseTopAlbums = (albums: ResponseAlbum[]): Album[] =>
+  albums
+    .map((album: ResponseAlbum) => ({
+      ...album,
+      artist: album.artist?.name,
+      image: getLargestImage(album.image)['#text'] || '',
+    }))
+    .filter((album: Album) => album.image);

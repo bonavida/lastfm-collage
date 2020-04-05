@@ -7,7 +7,7 @@ import { UserSliceState } from 'context/user';
 import './Header.scss';
 
 const Header = () => {
-  const { name, realname, url, image } = useSelector<RootState, UserSliceState>(
+  const { name, url, image } = useSelector<RootState, UserSliceState>(
     state => state.user
   );
   return (

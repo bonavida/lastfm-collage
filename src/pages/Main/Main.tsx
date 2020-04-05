@@ -10,29 +10,28 @@ const Main = () => {
   const { sessionKey } = useSelector<RootState, AuthSliceState>(
     state => state.auth
   );
-  const { albums } = useSelector<RootState, AlbumsSliceState>(
+  const { albums, loading } = useSelector<RootState, AlbumsSliceState>(
     state => state.albums
   );
   const dispatch = useDispatch();
 
-  if (albums.length) {
-    albums.forEach(album => {
-      // TODO: Remove albums with no cover and get more
-      if (!album.image) console.log(album.name);
-    });
-  }
-
   useEffect(() => {
     const getUser = async () => {
       await dispatch(fetchUser());
-      await dispatch(fetchTopAlbums({ period: 'overall', limit: 150 }));
+      dispatch(fetchTopAlbums({ period: 'overall', limit: 150 }));
     };
     if (sessionKey) {
       getUser();
     }
-  }, [sessionKey]);
+  }, [sessionKey, dispatch]);
 
-  return <div>Main</div>;
+  return (
+    <div>
+      Main
+      {loading && <div>Fetching albums...</div>}
+      {!loading && !!albums.length && <div>Albums: {albums.length}</div>}
+    </div>
+  );
 };
 
 export default Main;

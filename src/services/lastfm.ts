@@ -2,7 +2,7 @@
 import { lastfm } from 'config';
 /** Types */
 import { AuthParams } from 'models/auth';
-import { ResponseUser, Filters, ResponseAlbum } from 'models/lastfm';
+import { ResponseUser, Filters, ResponseTopAlbums } from 'models/lastfm';
 /** Utils */
 import { generateApiSignature } from 'utils';
 /** Modules */
@@ -52,6 +52,6 @@ export const getUserTopAlbums = (
     format: 'json',
   };
   return http
-    .get<{ topalbums: { album: ResponseAlbum[] } }>(`${apiUrl}`, { params })
+    .get<{ topalbums: ResponseTopAlbums }>(`${apiUrl}`, { params })
     .then(res => res.data.topalbums);
 };

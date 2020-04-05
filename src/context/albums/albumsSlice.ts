@@ -2,12 +2,12 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 /** Services */
 import { getUserTopAlbums } from 'services/lastfm';
 /** Types */
-import { ResponseAlbum, Filters } from 'models/lastfm';
+import { Filters } from 'models/lastfm';
 import { Album } from 'models/album';
 /** Actions */
 import { RootState } from 'store';
 /** Utils */
-import { getLargestImage } from 'utils';
+import { parseTopAlbums } from 'utils';
 
 export type AlbumsSliceState = {
   albums: Album[];
@@ -20,14 +20,26 @@ const initialState: AlbumsSliceState = {
 };
 
 export const fetchTopAlbums = createAsyncThunk<
-  ResponseAlbum[],
+  Album[],
   Filters,
   { state: RootState }
 >('albums/fetchTopAlbums', async (filters: Filters, { getState }) => {
   const { sessionKey } = getState().auth;
   const { name: username } = getState().user;
-  const topalbums = await getUserTopAlbums(username, sessionKey, filters);
-  return topalbums.album as ResponseAlbum[];
+  let albums: Album[] = [];
+  const currFilters = {
+    page: 1,
+    limit: filters.limit,
+  };
+  do {
+    const remaining = filters.limit - albums.length;
+    const topalbums = await getUserTopAlbums(username, sessionKey, currFilters);
+    const filteredAlbums = parseTopAlbums(topalbums.album).slice(0, remaining);
+    albums = [...albums, ...filteredAlbums];
+    if (parseInt(topalbums['@attr'].total, 2) < filters.limit) break;
+    currFilters.page++;
+  } while (albums.length < filters.limit);
+  return albums as Album[];
 });
 
 const albumsSlice = createSlice({
@@ -42,12 +54,8 @@ const albumsSlice = createSlice({
     });
     builder.addCase(
       fetchTopAlbums.fulfilled,
-      (state: AlbumsSliceState, action: PayloadAction<ResponseAlbum[]>) => {
-        state.albums = action.payload.map(album => ({
-          ...album,
-          artist: album.artist?.name,
-          image: getLargestImage(album.image)['#text'] || '',
-        }));
+      (state: AlbumsSliceState, action: PayloadAction<Album[]>) => {
+        state.albums = action.payload;
         state.loading = false;
       }
     );
