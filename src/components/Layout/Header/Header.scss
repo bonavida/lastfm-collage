@@ -9,7 +9,8 @@
     padding: $spacing-xs $spacing-m;
     color: $color-text-white-base;
     box-shadow: $box-shadow-header;
-    background: $color-primary linear-gradient($color-primary, $color-primary-dark);
+    background: $color-primary
+      linear-gradient($color-primary, $color-primary-dark);
     border: 1px solid $border-color-primary;
     border-bottom: 1px solid $border-color-primary-dark;
   }
