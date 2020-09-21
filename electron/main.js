@@ -8,7 +8,7 @@ const dev = process.env.NODE_ENV === 'development';
 // Keep a global reference of the window object
 let win = null;
 
-const installExtensions = async () => {
+const installExtensions = () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
@@ -66,7 +66,11 @@ const createWindow = () => {
 
 app.on('ready', async () => {
   if (dev) {
-    await installExtensions();
+    try {
+      await installExtensions();
+    } catch (e) {
+      console.log(e);
+    }
   }
   createWindow();
 });
