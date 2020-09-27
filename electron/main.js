@@ -2,7 +2,8 @@ const { app, BrowserWindow, shell, nativeImage } = require('electron');
 const path = require('path');
 const url = require('url');
 
-const LASTM_AUTH_URL = 'https://www.last.fm/api/auth';
+const LASTFM_AUTH_URL = 'https://www.last.fm/api/auth';
+const LASTFM_LOGIN_URL = 'https://secure.last.fm/login';
 const dev = process.env.NODE_ENV === 'development';
 
 // Keep a global reference of the window object
@@ -22,10 +23,16 @@ const isSafeishURL = externalUrl =>
   externalUrl.startsWith('http:') || externalUrl.startsWith('https:');
 
 const isAuthenticationUrl = externalUrl =>
-  externalUrl.startsWith(LASTM_AUTH_URL);
+  externalUrl.startsWith(LASTFM_AUTH_URL);
+
+const isLoginUrl = externalUrl => externalUrl.startsWith(LASTFM_LOGIN_URL);
 
 const handleOpenUrl = (event, externalUrl) => {
-  if (isSafeishURL(externalUrl) && !isAuthenticationUrl(externalUrl)) {
+  if (
+    isSafeishURL(externalUrl) &&
+    !isAuthenticationUrl(externalUrl) &&
+    !isLoginUrl(externalUrl)
+  ) {
     event.preventDefault();
     shell.openExternal(externalUrl);
   }
