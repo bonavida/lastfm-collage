@@ -1,0 +1,14 @@
+# See https://prettier.io/docs/en/ignore.html for more about ignoring files.
+
+# dependencies
+node_modules
+
+# build
+build
+out
+
+# misc
+yarn.lock
+
+# next
+.next

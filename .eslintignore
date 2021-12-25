@@ -1,0 +1,17 @@
+# Ignore all related to testing
+jest.config.js
+src/jest.setup.ts
+**/*.test.tsx
+
+# Ignore all related to build
+build/*
+out/*
+
+# Ignore node modules
+node_modules/*
+
+# Ignore Next.js stuff
+.next/*
+
+# Ignore Github stuff
+.github/*
