@@ -1,0 +1,46 @@
+@import 'styles/utils.scss';
+
+.container {
+  height: 50px;
+  @include flexCenter();
+  color: $color-text-black-base;
+  font-family: $font-secondary;
+  font-size: $font-size-s;
+  text-shadow: $text-shadow-white-base;
+  background-color: $color-text-white-darker-1;
+}
+
+.year {
+  &::before {
+    content: '\00a9';
+    margin: 0 $margin-s;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 $margin-l;
+  background: $color-text-black-brighter-2;
+}
+
+.link {
+  text-decoration: none;
+
+  &:not(:first-of-type) {
+    margin-left: $margin-sm;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.icon {
+  font-size: $font-size-m;
+  color: $color-text-black-base;
+
+  &:hover {
+    color: $color-text-black-brighter-1;
+  }
+}

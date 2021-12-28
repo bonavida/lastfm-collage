@@ -1,0 +1,12 @@
+@import 'styles/utils.scss';
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  padding: $spacing-m;
+}

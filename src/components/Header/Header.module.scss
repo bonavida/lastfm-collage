@@ -1,0 +1,50 @@
+@import 'styles/utils.scss';
+
+.container {
+  height: 85px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-xs $spacing-m;
+  color: $color-text-white-base;
+  box-shadow: $box-shadow-header;
+  background: $color-primary
+    linear-gradient($color-primary, $color-primary-dark);
+  border: 1px solid $border-color-primary;
+  border-bottom: 1px solid $border-color-primary-dark;
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semi-bold;
+  user-select: none;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.username {
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 1px;
+}
+
+.avatar {
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+}
