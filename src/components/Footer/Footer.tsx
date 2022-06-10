@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Footer.module.scss';
 
 const Footer = () => (
-  <div className={styles.container}>
+  <footer className={styles.container}>
     <span className={styles.author}>bonavida</span>
     <span className={styles.year}>{new Date().getFullYear()}</span>
     <div className={styles.divider} />
@@ -24,7 +24,7 @@ const Footer = () => (
     >
       <FontAwesomeIcon className={styles.icon} icon={['fab', 'github']} />
     </a>
-  </div>
+  </footer>
 );
 
 export default Footer;

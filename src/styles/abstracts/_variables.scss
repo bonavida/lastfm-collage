@@ -4,7 +4,7 @@
 
 // Font families
 $font-primary: 'Raleway', sans-serif;
-$font-secondary: "Lucida Grande", Arial, Helvetica, Verdana, sans-serif;
+$font-secondary: 'Lucida Grande', Arial, Helvetica, Verdana, sans-serif;
 
 // Font weights
 $font-weight-light: 400;
@@ -21,7 +21,7 @@ $font-size-s: 14px;
 $font-size-m: 16px;
 $font-size-ml: 20px;
 $font-size-l: 24px;
-$font-size-xl: 36px;
+$font-size-xl: 30px;
 $font-size-xxl: 48px;
 
 // Line heights
@@ -55,7 +55,6 @@ $color-text-white-darker-2: #b2b2b2;
 $border-color-primary: #a00;
 $border-color-primary-dark: #9f081e;
 
-
 /** SPACING & MARGIN */
 
 $spacing-xxs: 8px;
@@ -79,16 +78,14 @@ $padding-m: 10px;
 $padding-l: 15px;
 $padding-xl: 24px;
 
-
 /** ELEVATION **/
 
 // Box shadows
 $box-shadow-header: rgba(0, 0, 0, 0.3) 0 2px 5px;
-$box-shadow-primary-button: 0 0 0 0.2rem rgba(220,53,69,.5);
+$box-shadow-primary-button: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
 
 // Text shadows
 $text-shadow-white-base: $color-text-white-base 0 1px 0;
-
 
 /** MISC */
 

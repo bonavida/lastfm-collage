@@ -1,7 +1,7 @@
 @import 'styles/utils.scss';
 
 .container {
-  height: 50px;
+  min-height: 50px;
   @include flexCenter();
   color: $color-text-black-base;
   font-family: $font-secondary;

@@ -12,7 +12,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => (
   <div className={styles.container}>
     <Header />
-    <div className={styles.content}>{children}</div>
+    <main className={styles.content}>{children}</main>
     <Footer />
   </div>
 );

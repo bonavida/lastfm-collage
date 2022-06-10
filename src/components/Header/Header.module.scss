@@ -1,7 +1,9 @@
 @import 'styles/utils.scss';
 
 .container {
-  height: 85px;
+  top: 0;
+  position: sticky;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,9 +17,12 @@
 }
 
 .title {
-  margin: 0;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
   font-size: $font-size-xl;
-  font-weight: $font-weight-semi-bold;
+  font-weight: $font-weight-regular;
+  margin: 0;
   user-select: none;
 }
 
@@ -47,4 +52,13 @@
   width: 40px;
   height: 40px;
   margin-left: 10px;
+}
+
+.logo {
+  height: 0.8em;
+  fill: white !important;
+
+  path {
+    fill: white !important;
+  }
 }
