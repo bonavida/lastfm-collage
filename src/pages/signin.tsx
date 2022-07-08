@@ -3,9 +3,9 @@ import Head from 'next/head';
 /** Components */
 import Button from '@components/Button';
 
-const Login: NextPage = () => {
-  const loginHandler = () => {
-    console.log('login');
+const SignIn: NextPage = () => {
+  const signInHandler = () => {
+    console.log('signin');
   };
 
   return (
@@ -30,7 +30,7 @@ const Login: NextPage = () => {
             collage with the cover art of your favourite music registered in
             your last.fm account.
           </p>
-          <Button onClick={loginHandler}>Login to Last.fm</Button>
+          <Button onClick={signInHandler}>Login to Last.fm</Button>
         </section>
       </main>
       <style jsx>{`
@@ -88,4 +88,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default SignIn;
