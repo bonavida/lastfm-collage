@@ -1,12 +1,19 @@
-import type { NextPage } from 'next';
+import { useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import type { GetServerSideProps, NextPage, NextPageContext } from 'next';
 /** Components */
 import Button from '@components/Button';
+/** Services */
+import { signIn } from '@services/auth';
 
 const SignIn: NextPage = () => {
-  const signInHandler = () => {
-    console.log('signin');
-  };
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    router.replace('/signin', undefined, { shallow: true });
+  }, [router.isReady, router.query]);
 
   return (
     <>
@@ -14,7 +21,7 @@ const SignIn: NextPage = () => {
         <title>Sign In | Last.fm Collage</title>
         <meta
           name="description"
-          content="Last.fm Collage is an application built with Next.js that creates a
+          content="Last.fm Collage is an application that creates a
               collage with the cover art of your favourite music registered
               in your last.fm account"
         />
@@ -26,11 +33,11 @@ const SignIn: NextPage = () => {
         </h1>
         <section>
           <p>
-            Last.fm Collage is an application built with Next.js that creates a
+            <strong>Last.fm Collage</strong> is an application that creates a
             collage with the cover art of your favourite music registered in
             your last.fm account.
           </p>
-          <Button onClick={signInHandler}>Login to Last.fm</Button>
+          <Button onClick={() => signIn()}>Login to Last.fm</Button>
         </section>
       </main>
       <style jsx>{`
@@ -86,6 +93,17 @@ const SignIn: NextPage = () => {
       `}</style>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  query = {},
+}) => {
+  const { token } = query;
+  if (!token) return { props: {} };
+  console.log(token);
+  return {
+    props: {},
+  };
 };
 
 export default SignIn;

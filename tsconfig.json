@@ -26,6 +26,9 @@
       "@hooks/*": [
         "hooks/*"
       ],
+      "@config/*": [
+        "config/*"
+      ],
       "@public/*": [
         "../public/*"
       ]
