@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import type { GetServerSideProps, NextPage, NextPageContext } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 /** Components */
 import Button from '@components/Button';
 /** Services */
