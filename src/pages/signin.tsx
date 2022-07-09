@@ -11,7 +11,7 @@ const SignIn: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!router.isReady) return;
+    if (!router?.isReady || !router?.query?.token) return;
     router.replace('/signin', undefined, { shallow: true });
   }, [router.isReady, router.query]);
 
