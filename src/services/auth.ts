@@ -7,6 +7,8 @@ import {
   LASTFM_API_URL,
   LASTFM_CALLBACK_URL,
 } from '@constants/lastfm';
+/** Types */
+import { Session } from '@customTypes/auth';
 
 export const signIn = () => {
   if (!LASTFM_API_KEY) return;
@@ -14,7 +16,7 @@ export const signIn = () => {
   window.location.href = url;
 };
 
-export const getSession = async (token: string) => {
+export const getSession = async (token: string): Promise<Session> => {
   const authParams = {
     method: 'auth.getSession',
     token,
@@ -27,12 +29,9 @@ export const getSession = async (token: string) => {
     format: 'json',
   };
   const url = `${LASTFM_API_URL}?${new URLSearchParams(params).toString()}`;
-  // return http
-  //   .get<{ session: Session }>(`${apiUrl}`, { params })
-  //   .then(res => res.data.session);
-
   const response = await fetch(url, {
     method: 'GET',
   });
-  return await response.json();
+  const { session } = await response.json();
+  return session as Session;
 };

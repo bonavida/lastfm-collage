@@ -1,3 +1,5 @@
+import { Image } from '@customTypes/lastfm';
+
 export interface Session {
   subscriber: number;
   name: string;
@@ -9,4 +11,12 @@ export interface AuthParams {
   api_key: string;
   token?: string;
   sk?: string;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  name?: string;
+  url: string;
+  image: Image[];
 }

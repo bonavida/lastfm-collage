@@ -100,9 +100,13 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const { token } = query;
   if (!token) return { props: {} };
-  console.log(token);
+  const res = await fetch(`${process.env.API_URL}/api/me?token=${token}`, {
+    method: 'GET',
+  });
+  const { user } = await res.json();
+  console.log(user);
   return {
-    props: {},
+    props: { user },
   };
 };
 
