@@ -1,6 +1,12 @@
-import type { NextPage } from 'next';
+import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { withIronSessionSsr } from 'iron-session/next';
+/** Constants */
+import { sessionOptions } from '@constants/session';
+/** Types */
+import { User } from '@customTypes/auth';
+/** Styles */
 import styles from '@styles/Home.module.scss';
 
 const Home: NextPage = () => {
@@ -71,5 +77,19 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req, res }): Promise<{ props: { user?: User } }> => {
+    const { user } = req.session;
+    if (!user) {
+      res.setHeader('location', '/signin');
+      res.statusCode = 302;
+      res.end();
+      return { props: {} };
+    }
+    return { props: { user } };
+  },
+  sessionOptions
+);
 
 export default Home;

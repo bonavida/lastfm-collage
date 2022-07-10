@@ -23,7 +23,6 @@ export const getUser = async (sessionKey: string): Promise<User> => {
     method: 'GET',
   });
   const { user } = await response.json();
-  console.log(user);
   const { name, realname, url: userUrl, image } = user as ResponseUser;
   return {
     id: name,

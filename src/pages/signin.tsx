@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import type { GetServerSideProps, NextPage } from 'next';
+import { withIronSessionSsr } from 'iron-session/next';
+import type { NextPage, GetServerSideProps } from 'next';
 /** Components */
 import Button from '@components/Button';
 /** Services */
 import { signIn } from '@services/auth';
+/** Constants */
+import { sessionOptions } from '@constants/session';
 
 const SignIn: NextPage = () => {
   const router = useRouter();
@@ -95,19 +98,30 @@ const SignIn: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query = {},
-}) => {
-  const { token } = query;
-  if (!token) return { props: {} };
-  const res = await fetch(`${process.env.API_URL}/api/me?token=${token}`, {
-    method: 'GET',
-  });
-  const { user } = await res.json();
-  console.log(user);
-  return {
-    props: { user },
-  };
-};
+export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
+  async ({ req, res, query = {} }) => {
+    const { token } = query;
+    const { user: sessionUser } = req.session;
+    console.log(sessionUser);
+    console.log(token);
+    // If user is stored in session, return it in the props
+    if (sessionUser) return { props: { user: sessionUser } };
+    // If there's no token in the URL, return empty props
+    if (!token) return { props: {} };
+    // If there's a token in the URL, fetch the session and the user
+    // in order to save it in the session.
+    const response = await fetch(
+      `${process.env.API_URL}/api/me?token=${token}`,
+      {
+        method: 'GET',
+      }
+    );
+    const { user } = await response.json();
+    return {
+      props: { user },
+    };
+  },
+  sessionOptions
+);
 
 export default SignIn;

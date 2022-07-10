@@ -10,6 +10,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 registerIcons();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log(pageProps);
   return (
     <Layout>
       <Component {...pageProps} />
