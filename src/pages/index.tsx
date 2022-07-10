@@ -9,7 +9,11 @@ import { User } from '@customTypes/auth';
 /** Styles */
 import styles from '@styles/Home.module.scss';
 
-const Home: NextPage = () => {
+interface IndexPageProps {
+  user: User | null;
+}
+
+const Home: NextPage<IndexPageProps> = ({ user }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -22,6 +26,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        {user && <span>{user.username}</span>}
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -79,13 +84,13 @@ const Home: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res }): Promise<{ props: { user?: User } }> => {
-    const { user } = req.session;
+  async ({ req, res }): Promise<{ props: { user: User | null } }> => {
+    const { user } = req.session ?? {};
     if (!user) {
-      res.setHeader('location', '/signin');
       res.statusCode = 302;
+      res.setHeader('Location', '/signin');
       res.end();
-      return { props: {} };
+      return { props: { user: null } };
     }
     return { props: { user } };
   },

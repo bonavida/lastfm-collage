@@ -37,4 +37,18 @@
     text-decoration: none;
     box-shadow: $box-shadow-primary-button;
   }
+
+  &Secondary {
+    background-color: #333;
+    color: white;
+
+    &:hover {
+      background-color: #444;
+      border-color: #000;
+    }
+
+    &:focus {
+      box-shadow: $box-shadow-secondary-button;
+    }
+  }
 }

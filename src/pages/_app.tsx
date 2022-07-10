@@ -10,9 +10,9 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 registerIcons();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  console.log(pageProps);
+  const { user } = pageProps;
   return (
-    <Layout>
+    <Layout user={user}>
       <Component {...pageProps} />
     </Layout>
   );

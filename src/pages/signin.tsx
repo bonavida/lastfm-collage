@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { withIronSessionSsr } from 'iron-session/next';
@@ -9,14 +9,51 @@ import Button from '@components/Button';
 import { signIn } from '@services/auth';
 /** Constants */
 import { sessionOptions } from '@constants/session';
+/** Types */
+import { User } from '@customTypes/auth';
+/** Utils */
+import { retrieveLastfmToken } from '@utils/common';
 
-const SignIn: NextPage = () => {
+interface SignInPageProps {
+  user: User | null;
+}
+
+const SignIn: NextPage<SignInPageProps> = ({ user }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!router?.isReady || !router?.query?.token) return;
-    router.replace('/signin', undefined, { shallow: true });
-  }, [router.isReady, router.query]);
+    if (!user) {
+      const getMe = async (token: string) => {
+        try {
+          await fetch(`/api/me?token=${token}`, {
+            method: 'GET',
+          });
+          router.push('/');
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      if (window.location.search) {
+        const token = retrieveLastfmToken(window.location.search);
+        token && getMe(token);
+      }
+    }
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    const logout = async () => {
+      try {
+        await fetch('/api/logout', {
+          method: 'GET',
+        });
+        router.replace('/signin');
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    logout();
+  }, [router]);
 
   return (
     <>
@@ -40,7 +77,13 @@ const SignIn: NextPage = () => {
             collage with the cover art of your favourite music registered in
             your last.fm account.
           </p>
-          <Button onClick={() => signIn()}>Login to Last.fm</Button>
+          {user ? (
+            <Button isSecondary onClick={() => handleLogout()}>
+              Logout
+            </Button>
+          ) : (
+            <Button onClick={() => signIn()}>Login to Last.fm</Button>
+          )}
         </section>
       </main>
       <style jsx>{`
@@ -99,27 +142,9 @@ const SignIn: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res, query = {} }) => {
-    const { token } = query;
-    const { user: sessionUser } = req.session;
-    console.log(sessionUser);
-    console.log(token);
-    // If user is stored in session, return it in the props
-    if (sessionUser) return { props: { user: sessionUser } };
-    // If there's no token in the URL, return empty props
-    if (!token) return { props: {} };
-    // If there's a token in the URL, fetch the session and the user
-    // in order to save it in the session.
-    const response = await fetch(
-      `${process.env.API_URL}/api/me?token=${token}`,
-      {
-        method: 'GET',
-      }
-    );
-    const { user } = await response.json();
-    return {
-      props: { user },
-    };
+  async ({ req }) => {
+    const { user = null } = req.session ?? {};
+    return { props: { user } };
   },
   sessionOptions
 );

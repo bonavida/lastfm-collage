@@ -6,6 +6,7 @@ interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  isSecondary?: boolean;
   onClick: (e: React.MouseEvent) => void;
 }
 
@@ -13,11 +14,14 @@ const Button = ({
   children,
   className,
   disabled = false,
+  isSecondary = false,
   onClick,
 }: ButtonProps) => {
   return (
     <button
-      className={`${styles.button} ${className || ''}`}
+      className={`${styles.button} ${
+        isSecondary ? styles.buttonSecondary : ''
+      } ${className || ''}`}
       type="button"
       disabled={disabled}
       onClick={onClick}

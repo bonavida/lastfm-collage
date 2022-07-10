@@ -1,5 +1,5 @@
 /** Utils */
-import { generateApiSignature } from '@utils/lastfm';
+import { generateApiSignature, getLargestImage } from '@utils/lastfm';
 /** Constants */
 import { LASTFM_API_KEY, LASTFM_API_URL } from '@constants/lastfm';
 /** Types */
@@ -24,11 +24,12 @@ export const getUser = async (sessionKey: string): Promise<User> => {
   });
   const { user } = await response.json();
   const { name, realname, url: userUrl, image } = user as ResponseUser;
+  const largestImage = getLargestImage(image);
   return {
     id: name,
     username: name,
     name: realname,
     url: userUrl,
-    image,
+    avatar: largestImage['#text'],
   } as User;
 };

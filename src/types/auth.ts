@@ -18,5 +18,5 @@ export interface User {
   username: string;
   name?: string;
   url: string;
-  image: Image[];
+  avatar: string;
 }
