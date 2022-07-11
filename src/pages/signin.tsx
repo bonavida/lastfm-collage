@@ -11,8 +11,6 @@ import { signIn } from '@services/auth';
 import { sessionOptions } from '@constants/session';
 /** Types */
 import { User } from '@customTypes/auth';
-/** Utils */
-import { retrieveLastfmToken } from '@utils/common';
 
 interface SignInPageProps {
   user: User | null;
@@ -22,24 +20,22 @@ const SignIn: NextPage<SignInPageProps> = ({ user }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
-      const getMe = async (token: string) => {
-        try {
-          await fetch(`/api/me?token=${token}`, {
-            method: 'GET',
-          });
-          router.push('/');
-        } catch (e) {
-          console.error(e);
-        }
-      };
+    if (!router?.isReady || !router?.query?.token) return;
 
-      if (window.location.search) {
-        const token = retrieveLastfmToken(window.location.search);
-        token && getMe(token);
+    const getMe = async (token: string) => {
+      try {
+        await fetch(`/api/me?token=${token}`, {
+          method: 'GET',
+        });
+        router.push('/');
+      } catch (e) {
+        console.error(e);
+        router.replace('/signin', undefined, { shallow: true });
       }
-    }
-  }, []);
+    };
+
+    getMe(router.query.token as string);
+  }, [router.isReady, router.query]);
 
   const handleLogout = useCallback(() => {
     const logout = async () => {
