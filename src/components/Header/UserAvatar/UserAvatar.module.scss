@@ -1,0 +1,14 @@
+@import 'styles/utils.scss';
+
+.avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border: 2px solid $border-color-primary-dark;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+  cursor: pointer;
+}

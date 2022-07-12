@@ -1,0 +1,41 @@
+// Min width lowest mobile resolution
+$min-width-1: 'only screen and (min-width: 320px)';
+// Min width medium mobile resolutions
+$min-width-2: 'only screen and (min-width: 481px)';
+// Min width tablet resolutions
+$min-width-3: 'only screen and (min-width: 768px)';
+// Min width standard for laptops (iPad horizontal)
+$min-width-4: 'only screen and (min-width: 1024px)';
+// Min width between min laptops and min desktops
+$min-width-5: 'only screen and (min-width: 1200px)';
+// Min width standard for desktop displays
+$min-width-6: 'only screen and (min-width: 1440px)';
+// Min width standard for 2k displays
+$min-width-7: 'only screen and (min-width: 2560px)';
+// Min width standard for 4k displays
+$min-width-8: 'only screen and (min-width: 3840px)';
+
+// Max width medium mobile resolutions
+$max-width-1: 'only screen and (max-width: 480px)';
+// Max width mobile resolutions
+$max-width-2: 'only screen and (max-width: 767px)';
+// Max width tablet resolutions
+$max-width-3: 'only screen and (max-width: 1023px)';
+// Max width between max tablet and max laptop
+$max-width-4: 'only screen and (max-width: 1199px)';
+// Max width standard for laptops (iPad horizontal)
+$max-width-5: 'only screen and (min-width: 1439px)';
+// Max width standard for desktop displays
+$max-width-6: 'only screen and (min-width: 2559px)';
+// Max width standard for 2k displays
+$max-width-7: 'only screen and (min-width: 3839px)';
+
+// Common intervals
+$min-max-width-1-2: 'only screen and (min-width: 320px) and (max-width: 480px)';
+$min-max-width-2-3: 'only screen and (min-width: 481px) and (max-width: 767px)';
+$min-max-width-3-4: 'only screen and (min-width: 768px) and (max-width: 1023px)';
+$min-max-width-4-5: 'only screen and (min-width: 1024px) and (max-width: 1199px)';
+$min-max-width-4-6: 'only screen and (min-width: 1024px) and (max-width: 1439px)';
+$min-max-width-5-6: 'only screen and (min-width: 1200px) and (max-width: 1439px)';
+$min-max-width-6-7: 'only screen and (min-width: 1440px) and (max-width: 2559px)';
+$min-max-width-7-8: 'only screen and (min-width: 2560px) and (max-width: 3839px)';

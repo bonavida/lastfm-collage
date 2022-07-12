@@ -1,0 +1,69 @@
+.userMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 150px;
+  max-width: 300px;
+  background-color: #222;
+  color: white;
+  border-radius: 3px;
+  box-shadow: 0 1px 10px rgb(0 0 0 / 30%), 0 0 0 1px hsl(0deg 0% 100% / 30%);
+}
+
+.userMenuItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s linear;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &NoPadding {
+    padding: 0;
+  }
+}
+
+.userMenuItemLink {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.userMenuItemLogout {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  border-top: 1px solid #555;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: bold;
+
+  span {
+    margin-left: 1px;
+  }
+}
+
+.profile {
+  display: block;
+  color: #999;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.logout {
+  font-size: 14px;
+}
+
+.logoutIcon {
+  color: white;
+  font-size: 14px;
+}

@@ -1,4 +1,9 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Popover, ArrowContainer } from 'react-tiny-popover';
+/** Components */
+import UserAvatar from './UserAvatar';
+import UserMenu from './UserMenu';
 /** Types */
 import { User } from '@customTypes/auth';
 /** SVGs */
@@ -11,23 +16,46 @@ interface HeaderProps {
 }
 
 const Header = ({ user }: HeaderProps) => {
+  const [mounted, setMounted] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <header className={styles.container}>
-      <h1 className={styles.title}>
-        <Logo className={styles.logo} />
-        Collage
-      </h1>
-      {user && (
-        <div className={styles.user}>
-          <a href={user.url} target="_blank" rel="noopener noreferrer">
-            @<span className={styles.username}>{user.username}</span>
-          </a>
-          <img
-            className={styles.avatar}
-            alt={user.username}
-            src={user.avatar}
+      <Link href="/">
+        <a className={styles.title}>
+          <Logo className={styles.logo} />
+          <span>Collage</span>
+        </a>
+      </Link>
+      {mounted && user && (
+        <Popover
+          isOpen={isPopoverOpen}
+          positions={['top', 'bottom', 'left', 'right']}
+          content={({ position, childRect, popoverRect }) => (
+            <ArrowContainer
+              position={position}
+              childRect={childRect}
+              popoverRect={popoverRect}
+              arrowColor={'#333'}
+              arrowSize={7}
+              className="popover-arrow-container"
+              arrowClassName="popover-arrow"
+            >
+              <UserMenu user={user} />
+            </ArrowContainer>
+          )}
+          padding={12}
+          onClickOutside={() => setIsPopoverOpen(false)}
+        >
+          <UserAvatar
+            user={user}
+            onClick={() => setIsPopoverOpen(!isPopoverOpen)}
           />
-        </div>
+        </Popover>
       )}
     </header>
   );
