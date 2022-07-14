@@ -1,6 +1,9 @@
+import { useEffect } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { withIronSessionSsr } from 'iron-session/next';
+/** Services */
+import { getUserTopAlbums } from '@services/lastfm';
 /** Constants */
 import { sessionOptions } from '@constants/session';
 /** Types */
@@ -10,9 +13,27 @@ import styles from '@styles/pages/Home.module.scss';
 
 interface IndexPageProps {
   user: User | null;
+  sessionKey: string | undefined;
 }
 
-const Home: NextPage<IndexPageProps> = ({ user }) => {
+const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
+  useEffect(() => {
+    const getTopAlbums = async () => {
+      try {
+        const albums = await getUserTopAlbums(
+          user?.username ?? '',
+          sessionKey ?? '',
+          { period: 'overall', limit: 150 }
+        );
+        console.log(albums);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    getTopAlbums();
+  }, []);
+
   return (
     <>
       <Head>
@@ -31,15 +52,20 @@ const Home: NextPage<IndexPageProps> = ({ user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
-  async ({ req, res }): Promise<{ props: { user: User | null } }> => {
-    const { user } = req.session ?? {};
+  async ({
+    req,
+    res,
+  }): Promise<{
+    props: { user: User | null; sessionKey?: string | undefined };
+  }> => {
+    const { user, sessionKey } = req.session ?? {};
     if (!user) {
       res.statusCode = 302;
       res.setHeader('Location', '/signin');
       res.end();
       return { props: { user: null } };
     }
-    return { props: { user } };
+    return { props: { user, sessionKey } };
   },
   sessionOptions
 );

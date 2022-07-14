@@ -3,6 +3,8 @@ interface RegisterTime {
   '#text': number;
 }
 
+type Period = 'overall' | '7day' | '1month' | '3month' | '6month' | '12month';
+
 export interface ImageWeightMapper {
   [key: string]: number;
 }
@@ -30,9 +32,15 @@ export interface ResponseUser {
 }
 
 export interface Filters {
-  period?: string;
+  period: Period;
   limit: number;
   page?: number;
+}
+
+export interface ParamFilters {
+  period: Period;
+  limit: string;
+  page: string;
 }
 
 export interface ResponseArtist {
@@ -43,7 +51,7 @@ export interface ResponseArtist {
 
 export interface ResponseAlbum {
   name: string;
-  playcount: number;
+  playcount: string;
   mbid: string;
   url: string;
   artist: ResponseArtist;

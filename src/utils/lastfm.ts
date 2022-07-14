@@ -1,19 +1,10 @@
+/** Constants */
+import { LASTFM_SHARED_SECRET, IMAGE_WEIGHT_MAPPER } from '@constants/lastfm';
 /** Utils */
 import { generateMd5Hash } from '@utils/common';
 /** Types */
 import { Image, ResponseAlbum } from '@customTypes/lastfm';
 import { Album } from '@customTypes/album';
-/** Constants */
-import { LASTFM_SHARED_SECRET, IMAGE_WEIGHT_MAPPER } from '@constants/lastfm';
-
-/**
- * Retrieves the last.fm token from the URL query params
- * @param searchLocation String with the URL query params
- */
-export const retrieveLastfmToken = (searchLocation: string) => {
-  const searchParams = new URLSearchParams(searchLocation);
-  return searchParams.get('token');
-};
 
 /**
  * Sign your authenticated calls by first ordering the parameters sent in your call
@@ -43,9 +34,21 @@ export const getLargestImage = (images: Image[] = []) =>
 
 export const parseTopAlbums = (albums: ResponseAlbum[]): Album[] =>
   albums
-    .map((album: ResponseAlbum) => ({
-      ...album,
-      artist: album.artist?.name,
-      image: getLargestImage(album.image)['#text'] || '',
-    }))
-    .filter((album: Album) => album.image);
+    .map(
+      ({
+        mbid: id,
+        name,
+        artist,
+        image,
+        playcount: playCount,
+        url,
+      }: ResponseAlbum) => ({
+        id,
+        name,
+        artist: artist?.name ?? 'Unknown Artist',
+        image: (getLargestImage(image) ?? {})['#text'] ?? '',
+        playCount: parseInt(playCount, 10),
+        url,
+      })
+    )
+    .filter(({ image }: Album) => image);

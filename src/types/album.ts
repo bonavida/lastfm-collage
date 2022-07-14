@@ -1,7 +1,8 @@
 export interface Album {
+  id: string;
   name: string;
-  mbid: string;
-  url: string;
   artist: string;
   image: string;
+  playCount: number;
+  url: string;
 }
