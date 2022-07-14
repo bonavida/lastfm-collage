@@ -1,13 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { withIronSessionSsr } from 'iron-session/next';
+/** Components */
+import Canvas from '@components/Canvas';
 /** Services */
 import { getUserTopAlbums } from '@services/lastfm';
 /** Constants */
 import { sessionOptions } from '@constants/session';
+import { CANVAS_ITEM_SIZE } from '@constants/canvas';
 /** Types */
 import { User } from '@customTypes/auth';
+import { Album } from '@customTypes/album';
+import { CanvasDimensions } from '@customTypes/canvas';
 /** Styles */
 import styles from '@styles/pages/Home.module.scss';
 
@@ -17,15 +22,27 @@ interface IndexPageProps {
 }
 
 const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [dimensions, setDimensions] = useState<CanvasDimensions>({
+    width: 0,
+    height: 0,
+  });
+  const hasAlbums = useMemo(() => albums.length > 0, [albums]);
+
   useEffect(() => {
     const getTopAlbums = async () => {
       try {
-        const albums = await getUserTopAlbums(
+        const topAlbums = await getUserTopAlbums(
           user?.username ?? '',
           sessionKey ?? '',
           { period: 'overall', limit: 150 }
         );
-        console.log(albums);
+        console.log(topAlbums);
+        setAlbums(topAlbums);
+        setDimensions({
+          width: 10 * CANVAS_ITEM_SIZE,
+          height: 15 * CANVAS_ITEM_SIZE,
+        });
       } catch (e) {
         console.error(e);
       }
@@ -33,6 +50,26 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
 
     getTopAlbums();
   }, []);
+
+  const handleDraw = (context: CanvasRenderingContext2D | null) => {
+    if (!context) return;
+
+    let x = 0;
+    let y = 0;
+
+    albums.forEach(({ image }) => {
+      const myImage = new Image();
+      myImage.onload = () => {
+        context.drawImage(myImage, x, y);
+        x += CANVAS_ITEM_SIZE;
+        if (x >= dimensions.width) {
+          x = 0;
+          y += CANVAS_ITEM_SIZE;
+        }
+      };
+      myImage.src = image;
+    });
+  };
 
   return (
     <>
@@ -45,7 +82,13 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        {user && <span>{user.username}</span>}
+        {hasAlbums && (
+          <Canvas
+            dimensions={dimensions}
+            className={styles.canvas}
+            onDraw={handleDraw}
+          />
+        )}
       </div>
     </>
   );
