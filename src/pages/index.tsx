@@ -32,13 +32,20 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
   useEffect(() => {
     const getTopAlbums = async () => {
       try {
-        const topAlbums = await getUserTopAlbums(
-          user?.username ?? '',
-          sessionKey ?? '',
-          { period: 'overall', limit: 150 }
-        );
-        console.log(topAlbums);
-        setAlbums(topAlbums);
+        const response = await fetch('/api/albums', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: user?.username ?? '',
+            sessionKey: sessionKey ?? '',
+            filters: { period: 'overall', limit: 150 },
+          }),
+        });
+        const { albums }: { albums: Album[] } = await response.json();
+        console.log(albums);
+        setAlbums(albums);
         setDimensions({
           width: 10 * CANVAS_ITEM_SIZE,
           height: 15 * CANVAS_ITEM_SIZE,
