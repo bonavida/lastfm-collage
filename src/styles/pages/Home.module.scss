@@ -1,11 +1,24 @@
+@import 'styles/utils.scss';
+
 .container {
   display: flex;
   justify-content: center;
-  padding: 0 2rem;
 }
 
 .canvas {
   width: 100%;
   height: 100%;
   max-width: 80%;
+}
+
+@media #{$max-width-3} {
+  .canvas {
+    max-width: 90%;
+  }
+}
+
+@media #{$max-width-1} {
+  .canvas {
+    max-width: 100%;
+  }
 }
