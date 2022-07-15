@@ -3,12 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 /** Hooks */
 import useClickOutside from '@hooks/useClickOutside';
+/** Types */
+import { SelectOption } from '@customTypes/common';
 /** Styles */
 import styles from './Select.module.scss';
-
-interface SelectOption {
-  [key: string]: string | boolean;
-}
 
 interface SelectProps {
   name: string;

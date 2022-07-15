@@ -10,6 +10,7 @@ import Canvas from '@components/Canvas';
 /** Constants */
 import { sessionOptions } from '@constants/session';
 import { CANVAS_ITEM_SIZE } from '@constants/canvas';
+import { LASTFM_METHODS, LASTFM_PERIODS } from '@constants/lastfm';
 /** Types */
 import { User } from '@customTypes/auth';
 import { Album } from '@customTypes/album';
@@ -88,7 +89,7 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
   return (
     <>
       <Head>
-        <title>Last.fm Collage</title>
+        <title>Configuration | Last.fm Collage</title>
         <meta
           name="description"
           content="Last.fm Collage is an application that creates a collage with the cover art of your favourite music registered in your last.fm account."
@@ -96,38 +97,79 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
+        <h1>Configuration</h1>
         <form>
-          <div className={styles.formGroup}>
+          <div className={styles.formGroupSingle}>
             <div className={styles.formField}>
+              <h3 className={styles.formFieldTitle}>Collage type</h3>
               <Select
-                name="collage_kind"
-                options={[
-                  { id: 'user.gettopalbums', name: 'Top albums' },
-                  {
-                    id: 'user.getTopArtists',
-                    name: 'Top artists',
-                    disabled: true,
-                  },
-                ]}
+                name="collage_type"
+                options={LASTFM_METHODS}
                 value="user.gettopalbums"
                 onChange={handleSelectChange}
               />
             </div>
-            <div className={styles.formField}>
-              <Input
-                name="width"
-                placeholder="Set a value"
-                onChange={handleInputChange}
+          </div>
+          <div className={styles.formGroup}>
+            <div className={styles.formFieldWrapper}>
+              <h3 className={styles.formFieldTitle}>Dimensions</h3>
+              <div className={styles.formFieldHorizontal}>
+                <span className={styles.formFieldLabel}>Width</span>
+                <Input
+                  name="width"
+                  type="number"
+                  min="0"
+                  placeholder="Set a width"
+                  autoComplete="off"
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className={styles.formFieldHorizontal}>
+                <span className={styles.formFieldLabel}>Height</span>
+                <Input
+                  name="height"
+                  type="number"
+                  min="0"
+                  placeholder="Set a height"
+                  autoComplete="off"
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className={styles.formFieldWrapper}>
+              <h3 className={styles.formFieldTitle}>Period</h3>
+              <Select
+                name="period"
+                options={LASTFM_PERIODS}
+                value="overall"
+                onChange={handleSelectChange}
               />
             </div>
+          </div>
+          <div className={styles.formField}>
+            <Switch name="shuffle" value={true} onChange={handleSwitchChange}>
+              Shuffle
+            </Switch>
+          </div>
+          <div className={styles.formFieldWrapper}>
             <div className={styles.formField}>
               <Switch
-                name="collage_kind"
-                value={true}
+                name="other_user"
+                value={false}
                 onChange={handleSwitchChange}
               >
-                Shuffle
+                From another user?
               </Switch>
+            </div>
+            <div className={styles.formGroupSingle}>
+              <div className={styles.formField}>
+                <Input
+                  name="username"
+                  placeholder="Set a username"
+                  autoComplete="off"
+                  onChange={handleInputChange}
+                />
+              </div>
             </div>
           </div>
         </form>
@@ -141,9 +183,16 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
       </div>
       <style jsx>
         {`
+          h1 {
+            color: #333;
+            margin: 0;
+          }
           form {
             width: 100%;
             max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 30px;
           }
         `}
       </style>
