@@ -4,7 +4,8 @@
 
 // Font families
 $font-primary: 'Raleway', sans-serif;
-$font-secondary: 'Lucida Grande', Arial, Helvetica, Verdana, sans-serif;
+$font-secondary: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
 // Font weights
 $font-weight-light: 400;
@@ -54,6 +55,16 @@ $color-text-white-darker-2: #b2b2b2;
 // Border colors
 $border-color-primary: #a00;
 $border-color-primary-dark: #9f081e;
+
+// Field colors
+$border-color-field: #ced4da;
+$color-text-field: #495057;
+$background-color-field: #fff;
+$placeholder-color-field: #aaa;
+$background-color-disabled-field: #eee;
+$color-text-disabled-field: #a2a6ab;
+$border-color-field-focus: #83b6ed;
+$box-shadow-field-focus: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
 
 /** SPACING & MARGIN */
 

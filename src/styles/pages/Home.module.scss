@@ -11,6 +11,12 @@
   max-width: 80%;
 }
 
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+
 @media #{$max-width-3} {
   .canvas {
     max-width: 90%;

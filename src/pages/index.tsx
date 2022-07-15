@@ -3,9 +3,10 @@ import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { withIronSessionSsr } from 'iron-session/next';
 /** Components */
+import Select from '@components/Select';
+import Input from '@components/Input';
+import Switch from '@components/Switch';
 import Canvas from '@components/Canvas';
-/** Services */
-import { getUserTopAlbums } from '@services/lastfm';
 /** Constants */
 import { sessionOptions } from '@constants/session';
 import { CANVAS_ITEM_SIZE } from '@constants/canvas';
@@ -55,7 +56,7 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
       }
     };
 
-    getTopAlbums();
+    // getTopAlbums();
   }, []);
 
   const handleDraw = (context: CanvasRenderingContext2D | null) => {
@@ -78,6 +79,12 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
     });
   };
 
+  const handleSelectChange = () => {};
+
+  const handleInputChange = () => {};
+
+  const handleSwitchChange = () => {};
+
   return (
     <>
       <Head>
@@ -89,6 +96,41 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
+        <form>
+          <div className={styles.formGroup}>
+            <div className={styles.formField}>
+              <Select
+                name="collage_kind"
+                options={[
+                  { id: 'user.gettopalbums', name: 'Top albums' },
+                  {
+                    id: 'user.getTopArtists',
+                    name: 'Top artists',
+                    disabled: true,
+                  },
+                ]}
+                value="user.gettopalbums"
+                onChange={handleSelectChange}
+              />
+            </div>
+            <div className={styles.formField}>
+              <Input
+                name="width"
+                placeholder="Set a value"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className={styles.formField}>
+              <Switch
+                name="collage_kind"
+                value={true}
+                onChange={handleSwitchChange}
+              >
+                Shuffle
+              </Switch>
+            </div>
+          </div>
+        </form>
         {hasAlbums && (
           <Canvas
             dimensions={dimensions}
@@ -97,6 +139,14 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
           />
         )}
       </div>
+      <style jsx>
+        {`
+          form {
+            width: 100%;
+            max-width: 700px;
+          }
+        `}
+      </style>
     </>
   );
 };
