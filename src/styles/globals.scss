@@ -1,6 +1,9 @@
-// 1. Abstracts
+// Typography
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900&display=swap');
+
+// Abstracts
 @import 'abstracts/variables';
 
-// 2. Base
+// Base
 @import 'base/base';
 @import 'base/normalize';
