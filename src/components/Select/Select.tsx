@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FieldError } from 'react-hook-form';
 import cx from 'classnames';
 /** Hooks */
 import useClickOutside from '@hooks/useClickOutside';
@@ -7,6 +8,10 @@ import useClickOutside from '@hooks/useClickOutside';
 import { SelectOption } from '@customTypes/common';
 /** Styles */
 import styles from './Select.module.scss';
+
+type Error = {
+  message: string;
+};
 
 interface SelectProps {
   name: string;
@@ -17,7 +22,7 @@ interface SelectProps {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
-  error?: { message: string };
+  error?: Error | FieldError;
   onChange: (arg0: string | boolean) => void;
 }
 

@@ -1,20 +1,23 @@
-import { useEffect, useState, useMemo } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { withIronSessionSsr } from 'iron-session/next';
+import { useRouter } from 'next/router';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 /** Components */
 import Select from '@components/Select';
 import Input from '@components/Input';
 import Switch from '@components/Switch';
-import Canvas from '@components/Canvas';
+import Button from '@components/Button';
 /** Constants */
 import { sessionOptions } from '@constants/session';
-import { CANVAS_ITEM_SIZE } from '@constants/canvas';
-import { LASTFM_METHODS, LASTFM_PERIODS } from '@constants/lastfm';
+import {
+  LASTFM_METHODS,
+  LASTFM_PERIODS,
+  DEFAULT_LASTFM_METHOD,
+  DEFAULT_LASTFM_PERIOD,
+} from '@constants/lastfm';
 /** Types */
 import { User } from '@customTypes/auth';
-import { Album } from '@customTypes/album';
-import { CanvasDimensions } from '@customTypes/canvas';
 /** Styles */
 import styles from '@styles/pages/Home.module.scss';
 
@@ -23,68 +26,51 @@ interface IndexPageProps {
   sessionKey: string | undefined;
 }
 
-const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [dimensions, setDimensions] = useState<CanvasDimensions>({
-    width: 0,
-    height: 0,
-  });
-  const hasAlbums = useMemo(() => albums.length > 0, [albums]);
+interface FormValues {
+  method: string;
+  width: string;
+  height: string;
+  period: string;
+  shuffle: boolean;
+  otherUser: boolean;
+  username: string;
+}
 
-  useEffect(() => {
-    const getTopAlbums = async () => {
-      try {
-        const response = await fetch('/api/albums', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: user?.username ?? '',
-            sessionKey: sessionKey ?? '',
-            filters: { period: 'overall', limit: 150 },
-          }),
-        });
-        const { albums }: { albums: Album[] } = await response.json();
-        console.log(albums);
-        setAlbums(albums);
-        setDimensions({
-          width: 10 * CANVAS_ITEM_SIZE,
-          height: 15 * CANVAS_ITEM_SIZE,
-        });
-      } catch (e) {
-        console.error(e);
-      }
+const Home: NextPage<IndexPageProps> = () => {
+  const router = useRouter();
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+  } = useForm<FormValues>({
+    defaultValues: {
+      method: DEFAULT_LASTFM_METHOD,
+      period: DEFAULT_LASTFM_PERIOD,
+      shuffle: true,
+    },
+  });
+
+  const isOtherUserSelected = watch('otherUser');
+
+  const handleSubmitForm: SubmitHandler<FormValues> = (
+    { shuffle, otherUser, username, ...data },
+    event
+  ) => {
+    console.log(data);
+    console.log(errors);
+    event?.preventDefault();
+
+    if (errors && Object.keys(errors).length) return;
+
+    const params = {
+      ...data,
+      ...(shuffle && { shuffle: '1' }),
+      ...(otherUser && { username }),
     };
 
-    // getTopAlbums();
-  }, []);
-
-  const handleDraw = (context: CanvasRenderingContext2D | null) => {
-    if (!context) return;
-
-    let x = 0;
-    let y = 0;
-
-    albums.forEach(({ image }) => {
-      const myImage = new Image();
-      myImage.onload = () => {
-        context.drawImage(myImage, x, y);
-        x += CANVAS_ITEM_SIZE;
-        if (x >= dimensions.width) {
-          x = 0;
-          y += CANVAS_ITEM_SIZE;
-        }
-      };
-      myImage.src = image;
-    });
+    router.push(`/collage?${new URLSearchParams(params).toString()}`);
   };
-
-  const handleSelectChange = () => {};
-
-  const handleInputChange = () => {};
-
-  const handleSwitchChange = () => {};
 
   return (
     <>
@@ -98,15 +84,23 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
       </Head>
       <div className={styles.container}>
         <h1>Configuration</h1>
-        <form>
+        <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div className={styles.formGroupSingle}>
             <div className={styles.formField}>
               <h3 className={styles.formFieldTitle}>Collage type</h3>
-              <Select
-                name="collage_type"
-                options={LASTFM_METHODS}
-                value="user.gettopalbums"
-                onChange={handleSelectChange}
+              <Controller
+                control={control}
+                name="method"
+                rules={{ required: 'This field is required.' }}
+                render={({ field: { value, onChange } }) => (
+                  <Select
+                    name="method"
+                    options={LASTFM_METHODS}
+                    value={value}
+                    error={errors.method}
+                    onChange={onChange}
+                  />
+                )}
               />
             </div>
           </div>
@@ -115,71 +109,112 @@ const Home: NextPage<IndexPageProps> = ({ user, sessionKey }) => {
               <h3 className={styles.formFieldTitle}>Dimensions</h3>
               <div className={styles.formFieldHorizontal}>
                 <span className={styles.formFieldLabel}>Width</span>
-                <Input
+                <Controller
+                  control={control}
                   name="width"
-                  type="number"
-                  min="0"
-                  placeholder="Set a width"
-                  autoComplete="off"
-                  onChange={handleInputChange}
+                  rules={{ required: 'This field is required.' }}
+                  render={({ field: { value, onChange } }) => (
+                    <Input
+                      name="width"
+                      type="number"
+                      min="0"
+                      placeholder="Set a width"
+                      autoComplete="off"
+                      defaultValue={value}
+                      error={errors.width}
+                      onChange={onChange}
+                    />
+                  )}
                 />
               </div>
               <div className={styles.formFieldHorizontal}>
                 <span className={styles.formFieldLabel}>Height</span>
-                <Input
+                <Controller
+                  control={control}
                   name="height"
-                  type="number"
-                  min="0"
-                  placeholder="Set a height"
-                  autoComplete="off"
-                  onChange={handleInputChange}
+                  rules={{ required: 'This field is required.' }}
+                  render={({ field: { value, onChange } }) => (
+                    <Input
+                      name="height"
+                      type="number"
+                      min="0"
+                      placeholder="Set a height"
+                      autoComplete="off"
+                      defaultValue={value}
+                      error={errors.height}
+                      onChange={onChange}
+                    />
+                  )}
                 />
               </div>
             </div>
             <div className={styles.formFieldWrapper}>
               <h3 className={styles.formFieldTitle}>Period</h3>
-              <Select
+              <Controller
+                control={control}
                 name="period"
-                options={LASTFM_PERIODS}
-                value="overall"
-                onChange={handleSelectChange}
+                rules={{ required: 'This field is required.' }}
+                render={({ field: { value, onChange } }) => (
+                  <Select
+                    name="period"
+                    options={LASTFM_PERIODS}
+                    value={value}
+                    error={errors.period}
+                    onChange={onChange}
+                  />
+                )}
               />
             </div>
           </div>
           <div className={styles.formField}>
-            <Switch name="shuffle" value={true} onChange={handleSwitchChange}>
-              Shuffle
-            </Switch>
+            <Controller
+              control={control}
+              name="shuffle"
+              render={({ field: { value, onChange } }) => (
+                <Switch name="shuffle" value={value} onChange={onChange}>
+                  Shuffle
+                </Switch>
+              )}
+            />
           </div>
           <div className={styles.formFieldWrapper}>
             <div className={styles.formField}>
-              <Switch
-                name="other_user"
-                value={false}
-                onChange={handleSwitchChange}
-              >
-                From another user?
-              </Switch>
+              <Controller
+                control={control}
+                name="otherUser"
+                render={({ field: { value, onChange } }) => (
+                  <Switch name="otherUser" value={value} onChange={onChange}>
+                    Wanna get data from another user instead?
+                  </Switch>
+                )}
+              />
             </div>
-            <div className={styles.formGroupSingle}>
-              <div className={styles.formField}>
-                <Input
-                  name="username"
-                  placeholder="Set a username"
-                  autoComplete="off"
-                  onChange={handleInputChange}
-                />
+            {isOtherUserSelected && (
+              <div className={styles.formGroupSingle}>
+                <div className={styles.formField}>
+                  <Controller
+                    control={control}
+                    name="username"
+                    rules={{ required: 'This field is required.' }}
+                    render={({ field: { value, onChange } }) => (
+                      <Input
+                        name="username"
+                        placeholder="Set a username"
+                        autoComplete="off"
+                        defaultValue={value}
+                        error={errors.username}
+                        onChange={onChange}
+                      />
+                    )}
+                  />
+                </div>
               </div>
-            </div>
+            )}
+          </div>
+          <div className={styles.formFooter}>
+            <Button type="submit">Generate</Button>
           </div>
         </form>
-        {hasAlbums && (
-          <Canvas
-            dimensions={dimensions}
-            className={styles.canvas}
-            onDraw={handleDraw}
-          />
-        )}
       </div>
       <style jsx>
         {`
@@ -205,14 +240,21 @@ export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
     req,
     res,
   }): Promise<{
+    redirect?: {
+      permanent?: boolean;
+      destination: string;
+    };
     props: { user: User | null; sessionKey?: string | undefined };
   }> => {
     const { user, sessionKey } = req.session ?? {};
     if (!user) {
-      res.statusCode = 302;
-      res.setHeader('Location', '/signin');
-      res.end();
-      return { props: { user: null } };
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/signin',
+        },
+        props: { user: null },
+      };
     }
     return { props: { user, sessionKey } };
   },

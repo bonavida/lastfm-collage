@@ -22,13 +22,21 @@
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:focus {
-    border-color: $border-color-field-focus;
     outline: 0;
-    box-shadow: $box-shadow-field-focus;
+
+    &:not(.InputElementError) {
+      border-color: $border-color-field-focus;
+      box-shadow: $box-shadow-field-focus;
+    }
   }
 
   &::placeholder {
     color: $placeholder-color-field;
+  }
+
+  &Error {
+    border-color: $color-primary;
+    box-shadow: $box-shadow-primary-button;
   }
 }
 
@@ -40,4 +48,5 @@
 .InputErrorMessage {
   color: $color-primary;
   font-size: $font-size-s;
+  font-weight: $font-weight-semi-bold;
 }

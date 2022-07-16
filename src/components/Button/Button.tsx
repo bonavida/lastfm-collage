@@ -2,14 +2,16 @@
 import styles from './Button.module.scss';
 
 interface ButtonProps {
+  type?: 'button' | 'submit' | 'reset';
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
   isSecondary?: boolean;
-  onClick: (e: React.MouseEvent) => void;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 const Button = ({
+  type = 'button',
   children,
   className,
   disabled = false,
@@ -21,7 +23,7 @@ const Button = ({
       className={`${styles.button} ${
         isSecondary ? styles.buttonSecondary : ''
       } ${className || ''}`}
-      type="button"
+      type={type}
       disabled={disabled}
       onClick={onClick}
     >

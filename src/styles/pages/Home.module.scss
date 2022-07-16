@@ -13,6 +13,12 @@
   max-width: 80%;
 }
 
+.formFooter {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
 .formGroup {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -44,7 +50,6 @@
 
 .formFieldHorizontal {
   display: flex;
-  align-items: center;
   column-gap: 15px;
 }
 
@@ -56,6 +61,9 @@
 
 .formFieldLabel {
   min-width: 50px;
+  height: 36px;
+  display: flex;
+  align-items: center;
   font-size: $font-size-s;
   font-weight: $font-weight-semi-bold;
 }

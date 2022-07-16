@@ -4,6 +4,7 @@ import {
   getLargestImage,
   parseTopAlbums,
 } from '@utils/lastfm';
+import { shuffleArray } from '@utils/common';
 /** Constants */
 import { LASTFM_API_KEY, LASTFM_API_URL } from '@constants/lastfm';
 /** Types */
@@ -60,7 +61,6 @@ const getPaginatedUserTopAlbums = async (
   filters: ParamFilters
 ): Promise<ResponseTopAlbums> => {
   const signatureParams = {
-    method: 'user.gettopalbums',
     user: username,
     api_key: LASTFM_API_KEY,
     sk: sessionKey,
@@ -83,11 +83,11 @@ const getPaginatedUserTopAlbums = async (
 export const getUserTopAlbums = async (
   username: string,
   sessionKey: string,
-  { limit, period }: Filters
+  { limit, shuffle, ...filters }: Filters
 ): Promise<Album[]> => {
   const albums: Album[] = [];
   const currentFilters = {
-    period,
+    ...filters,
     limit: `${limit}`,
     page: '1',
   };
@@ -100,5 +100,5 @@ export const getUserTopAlbums = async (
     if (parseInt(attr.total, 10) < limit) break;
     currentFilters.page = `${parseInt(currentFilters.page, 10) + 1}`;
   } while (albums.length < limit);
-  return albums;
+  return shuffle ? shuffleArray(albums) : albums;
 };

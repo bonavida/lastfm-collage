@@ -33,7 +33,8 @@
     }
 
     &Error {
-      box-shadow: 0 0 0 3px $border-color-primary;
+      border-color: $color-primary;
+      box-shadow: $box-shadow-primary-button;
     }
   }
 
@@ -115,5 +116,6 @@
   &ErrorMessage {
     color: $color-primary;
     font-size: $font-size-s;
+    font-weight: $font-weight-semi-bold;
   }
 }

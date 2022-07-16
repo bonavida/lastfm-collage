@@ -41,4 +41,19 @@ export const LASTFM_PERIODS: Array<SelectOption> = [
     id: '1month',
     name: '1 month',
   },
+  {
+    id: '3month',
+    name: '3 months',
+  },
+  {
+    id: '6month',
+    name: '6 months',
+  },
+  {
+    id: '12month',
+    name: '1 year',
+  },
 ];
+
+export const DEFAULT_LASTFM_METHOD = 'user.gettopalbums';
+export const DEFAULT_LASTFM_PERIOD = 'overall';

@@ -1,4 +1,5 @@
 import { ForwardedRef, forwardRef, InputHTMLAttributes } from 'react';
+import { FieldError } from 'react-hook-form';
 import cx from 'classnames';
 /** Styles */
 import styles from './Input.module.scss';
@@ -11,7 +12,7 @@ type InputProps = {
   name: string;
   label?: string;
   className?: string;
-  error?: Error;
+  error?: Error | FieldError;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = (

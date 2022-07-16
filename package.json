@@ -19,6 +19,7 @@
     "next": "12.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.33.1",
     "react-tiny-popover": "^7.1.0"
   },
   "devDependencies": {

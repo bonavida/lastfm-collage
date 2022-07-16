@@ -19,7 +19,7 @@ const UserMenu = ({ user }: UserMenuProps) => {
         await fetch('/api/logout', {
           method: 'GET',
         });
-        router.replace('/signin');
+        router.push('/signin');
       } catch (e) {
         console.error(e);
       }

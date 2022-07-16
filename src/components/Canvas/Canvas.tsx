@@ -1,6 +1,6 @@
 import { useRef, useLayoutEffect } from 'react';
 /** Types */
-import { CanvasDimensions } from '@customTypes/canvas';
+import { CanvasDimensions } from '@customTypes/collage';
 /** Styles */
 import styles from './Canvas.module.scss';
 

@@ -32,15 +32,14 @@ export interface ResponseUser {
 }
 
 export interface Filters {
+  method: string;
   period: Period;
   limit: number;
-  page?: number;
+  shuffle?: boolean;
 }
 
 export interface ParamFilters {
-  period: Period;
-  limit: string;
-  page: string;
+  [key: string]: string;
 }
 
 export interface ResponseArtist {

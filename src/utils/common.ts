@@ -17,3 +17,17 @@ export const retrieveLastfmToken = (searchLocation: string) => {
   searchParams.delete('token');
   return token;
 };
+
+/**
+ * Shuffles an array of items
+ * @param array Array to be shuffled
+ * @returns Shuffled array
+ */
+export const shuffleArray = (array: Array<any>): Array<any> => {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+};
