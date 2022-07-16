@@ -110,7 +110,6 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({
     req,
-    res,
     query,
   }): Promise<{
     redirect?: {

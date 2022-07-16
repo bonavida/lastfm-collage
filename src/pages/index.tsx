@@ -238,7 +238,6 @@ const Home: NextPage<IndexPageProps> = () => {
 export const getServerSideProps: GetServerSideProps = withIronSessionSsr(
   async ({
     req,
-    res,
   }): Promise<{
     redirect?: {
       permanent?: boolean;
