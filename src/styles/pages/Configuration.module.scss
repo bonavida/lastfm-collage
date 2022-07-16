@@ -7,12 +7,6 @@
   row-gap: 35px;
 }
 
-.canvas {
-  width: 100%;
-  height: 100%;
-  max-width: 80%;
-}
-
 .formFooter {
   width: 100%;
   text-align: center;
@@ -68,12 +62,6 @@
   font-weight: $font-weight-semi-bold;
 }
 
-@media #{$max-width-3} {
-  .canvas {
-    max-width: 90%;
-  }
-}
-
 @media #{$max-width-2} {
   .formGroupSingle {
     grid-template-columns: 1fr;
@@ -83,11 +71,5 @@
   .formGroup {
     grid-template-columns: 1fr;
     row-gap: 30px;
-  }
-}
-
-@media #{$max-width-1} {
-  .canvas {
-    max-width: 100%;
   }
 }

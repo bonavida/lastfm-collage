@@ -1,0 +1,51 @@
+@import 'styles/utils.scss';
+
+$spinner-color: $color-primary;
+$spinner-size: 0.8;
+$faded-opacity: 0.35;
+$spinner-delay: 0.18;
+$spinner-scale: 0.87;
+$animation-duration: 1.1s;
+$animation-rest: 25;
+
+.spinner {
+  & * {
+    display: inline-block;
+    width: #{$spinner-size}rem;
+    height: #{$spinner-size}rem;
+    background-color: $spinner-color;
+    border-radius: #{$spinner-size}rem;
+    margin: 0 #{$spinner-size / 3}rem;
+  }
+
+  @for $i from 1 through 3 {
+    & .spinnerDot#{$i} {
+      animation: fade
+        $animation-duration
+        ease-in-out
+        #{$i *
+        $spinner-delay}s
+        infinite
+        both;
+    }
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: $faded-opacity;
+    transform: scale($spinner-scale);
+  }
+  #{(100 - $animation-rest) / 2}% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  #{100 - $animation-rest}% {
+    opacity: $faded-opacity;
+    transform: scale($spinner-scale);
+  }
+  100% {
+    opacity: $faded-opacity;
+    transform: scale($spinner-scale);
+  }
+}

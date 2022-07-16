@@ -11,9 +11,9 @@ import { CANVAS_ITEM_SIZE } from '@constants/canvas';
 /** Types */
 import { User } from '@customTypes/auth';
 import { Album } from '@customTypes/album';
-/** Styles */
-import styles from '@styles/pages/Home.module.scss';
 import { CollageFilters } from '@customTypes/collage';
+/** Styles */
+import styles from '@styles/pages/Collage.module.scss';
 
 interface CollagePageProps {
   user: User | null;

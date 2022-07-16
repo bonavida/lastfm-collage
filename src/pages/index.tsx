@@ -19,7 +19,7 @@ import {
 /** Types */
 import { User } from '@customTypes/auth';
 /** Styles */
-import styles from '@styles/pages/Home.module.scss';
+import styles from '@styles/pages/Configuration.module.scss';
 
 interface IndexPageProps {
   user: User | null;
