@@ -74,6 +74,18 @@
   }
 }
 
+@media #{$max-width-2} {
+  .formGroupSingle {
+    grid-template-columns: 1fr;
+    grid-column: unset;
+  }
+
+  .formGroup {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+}
+
 @media #{$max-width-1} {
   .canvas {
     max-width: 100%;
