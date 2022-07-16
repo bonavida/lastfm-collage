@@ -132,6 +132,12 @@ const SignIn: NextPage<SignInPageProps> = ({ user }) => {
         button:hover {
           transform: perspective(1px) scale(1.01) translateZ(0);
         }
+
+        @media only screen and (max-width: 767px) {
+          h1 {
+            font-size: 3rem;
+          }
+        }
       `}</style>
     </>
   );

@@ -57,8 +57,6 @@ const Home: NextPage<IndexPageProps> = () => {
     { shuffle, otherUser, username, ...data },
     event
   ) => {
-    console.log(data);
-    console.log(errors);
     event?.preventDefault();
 
     if (errors && Object.keys(errors).length) return;

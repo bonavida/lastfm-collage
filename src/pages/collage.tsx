@@ -14,6 +14,7 @@ import { Album } from '@customTypes/album';
 import { CollageFilters } from '@customTypes/collage';
 /** Styles */
 import styles from '@styles/pages/Collage.module.scss';
+import Spinner from '@components/Spinner';
 
 interface CollagePageProps {
   user: User | null;
@@ -23,6 +24,7 @@ interface CollagePageProps {
 
 const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   const [albums, setAlbums] = useState<Album[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const hasAlbums = useMemo(() => albums.length > 0, [albums]);
   const dimensions = useMemo(
     () => ({
@@ -40,6 +42,8 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
 
   useEffect(() => {
     const getTopAlbums = async () => {
+      setLoading(true);
+
       try {
         const { username, ...restFilters } = filters;
         const response = await fetch('/api/albums', {
@@ -54,10 +58,11 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
           }),
         });
         const { albums }: { albums: Album[] } = await response.json();
-        console.log(albums);
         setAlbums(albums);
+        setLoading(false);
       } catch (e) {
         console.error(e);
+        setLoading(false);
       }
     };
 
@@ -95,7 +100,8 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        {hasAlbums && (
+        {loading && <Spinner />}
+        {!loading && hasAlbums && (
           <Canvas
             dimensions={dimensions}
             className={styles.canvas}
