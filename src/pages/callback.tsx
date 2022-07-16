@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import type { NextPage } from 'next';
+/** Context */
+import { useToast } from 'context/useToast';
 /** Components */
 import Spinner from '@components/Spinner';
 
 const CallbackPage: NextPage = () => {
   const router = useRouter();
+  const { addToast } = useToast();
 
   useEffect(() => {
     if (!router?.isReady || !router?.query?.token) return;
@@ -16,9 +19,19 @@ const CallbackPage: NextPage = () => {
         await fetch(`/api/me?token=${token}`, {
           method: 'GET',
         });
+        addToast({
+          message: 'You are successfully logged in',
+          status: 'success',
+          duration: 4000,
+        });
         router.push('/');
       } catch (e) {
         console.error(e);
+        addToast({
+          message: 'Oops, something went wrong',
+          status: 'error',
+          isStatic: true,
+        });
         router.push('/signin');
       }
     };

@@ -3,11 +3,12 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
   faRightFromBracket,
   faAngleDown,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const registerIcons = (): void => {
   // Add fontawesome icons to the library in order to import just used icons
-  library.add(fab, faRightFromBracket, faAngleDown);
+  library.add(fab, faRightFromBracket, faAngleDown, faTimes);
   // Disable add automatically the css styles into the <head> for Next.js
   config.autoAddCss = false;
 };
