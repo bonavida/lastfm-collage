@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useLayoutEffect, forwardRef, ForwardedRef } from 'react';
 /** Types */
 import { CanvasDimensions } from '@customTypes/collage';
 /** Styles */
@@ -7,21 +7,20 @@ import styles from './Canvas.module.scss';
 interface CanvasProps {
   dimensions: CanvasDimensions;
   className?: string;
-  onDraw: (context: CanvasRenderingContext2D | null) => void;
+  onDraw: (ref: ForwardedRef<HTMLCanvasElement>) => void;
 }
 
-const Canvas = ({ dimensions, className = '', onDraw }: CanvasProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
+const Canvas = (
+  { dimensions, className = '', onDraw }: CanvasProps,
+  ref: ForwardedRef<HTMLCanvasElement>
+) => {
   useLayoutEffect(() => {
-    if (!canvasRef.current) return;
-    const context = canvasRef.current.getContext('2d');
-    onDraw && onDraw(context);
+    onDraw && onDraw(ref);
   }, []);
 
   return (
     <canvas
-      ref={canvasRef}
+      ref={ref}
       width={dimensions.width}
       height={dimensions.height}
       className={`${styles.canvas} ${className}`}
@@ -29,4 +28,4 @@ const Canvas = ({ dimensions, className = '', onDraw }: CanvasProps) => {
   );
 };
 
-export default Canvas;
+export default forwardRef(Canvas);

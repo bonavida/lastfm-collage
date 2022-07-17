@@ -31,3 +31,40 @@ export const shuffleArray = (array: Array<any>): Array<any> => {
   }
   return shuffledArray;
 };
+
+/**
+ * Get base64 encoded image from a canvas
+ * @param canvas Canvas to be drawn on
+ * @param quality Quality of the image
+ * @returns {string} Base64 encoded image
+ */
+export const getImageFromCanvas = (
+  canvas: HTMLCanvasElement | null,
+  quality: number
+) => canvas?.toDataURL('image/png', quality);
+
+/**
+ * Resize a base 64 Image
+ * @param {String} base64 - The base64 string (must include MIME type)
+ * @param {Number} newWidth - The width of the image in pixels
+ * @param {Number} newHeight - The height of the image in pixels
+ */
+export const resizeBase64Img = (
+  base64: string,
+  newWidth: number,
+  newHeight: number
+): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    const context = canvas.getContext('2d');
+    const img = document.createElement('img');
+    img.src = base64;
+    img.onload = () => {
+      context?.scale(newWidth / img.width, newHeight / img.height);
+      context?.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL());
+    };
+  });
+};

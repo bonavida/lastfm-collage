@@ -4,7 +4,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 35px;
+  justify-content: center;
+  row-gap: 20px;
+  padding: 20px 0;
+
+  &Loading {
+    height: 100%;
+  }
+}
+
+.collageLinks {
+  display: flex;
+  align-items: center;
+  column-gap: 35px;
+}
+
+.collageLink {
+  text-decoration: underline;
+  color: #037af4;
+  font-weight: $font-weight-semi-bold;
 }
 
 .canvas {
