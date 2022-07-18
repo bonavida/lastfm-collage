@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { withIronSessionSsr } from 'iron-session/next';
@@ -18,6 +18,7 @@ import { CollageFilters } from '@customTypes/collage';
 /** Styles */
 import styles from '@styles/pages/Collage.module.scss';
 import Spinner from '@components/Spinner';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface CollagePageProps {
   user: User | null;
@@ -29,10 +30,8 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
+  const [base64Canvas, setBase64Canvas] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const lowRef = useRef<HTMLAnchorElement>(null);
-  const mediumRef = useRef<HTMLAnchorElement>(null);
-  const highRef = useRef<HTMLAnchorElement>(null);
 
   const hasAlbums = useMemo(() => albums.length > 0, [albums]);
   const dimensions = useMemo(
@@ -82,7 +81,8 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     getTopAlbums();
   }, []);
 
-  const handleDraw = () => {
+  const handleDraw = useCallback(() => {
+    console.log(handleDraw);
     if (!canvasRef.current) return;
 
     const context = canvasRef.current.getContext('2d');
@@ -92,7 +92,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
 
     albums.forEach(({ image }) => {
       const myImage = new Image();
-      myImage.crossOrigin = 'anonymous';
+      myImage.crossOrigin = '*';
       myImage.onload = () => {
         context?.drawImage(myImage, x, y);
         x += CANVAS_ITEM_SIZE;
@@ -106,34 +106,27 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
       };
       myImage.src = image;
     });
-  };
+  }, [albums, dimensions]);
+
+  const handleDownload = useCallback(
+    (quality: number, partialText: string) => {
+      resizeBase64Img(
+        base64Canvas,
+        dimensions.width * quality,
+        dimensions.height * quality
+      ).then((resizedImg: string) => {
+        const link = document.createElement('a');
+        link.href = resizedImg;
+        link.download = `collage_${partialText}.png`;
+        link.click();
+      });
+    },
+    [base64Canvas, dimensions]
+  );
 
   useEffect(() => {
-    if (imagesLoaded) {
-      const base64OriginalCanvas =
-        getImageFromCanvas(canvasRef.current, 1) ?? '';
-
-      // High res
-      highRef.current?.setAttribute('href', base64OriginalCanvas);
-
-      // Medium res
-      resizeBase64Img(
-        base64OriginalCanvas,
-        dimensions.width / 2,
-        dimensions.height / 2
-      ).then((resizedImg: string) => {
-        mediumRef.current?.setAttribute('href', resizedImg);
-      });
-
-      // Low res
-      resizeBase64Img(
-        base64OriginalCanvas,
-        dimensions.width / 4,
-        dimensions.height / 4
-      ).then((resizedImg: string) => {
-        lowRef.current?.setAttribute('href', resizedImg);
-      });
-    }
+    imagesLoaded &&
+      setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
   }, [imagesLoaded]);
 
   return (
@@ -151,30 +144,36 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
         {!loading && hasAlbums && (
           <>
             <div className={styles.collageLinks}>
-              <a
-                ref={lowRef}
+              <button
                 className={styles.collageLink}
-                href=""
-                download="collage_low.png"
+                onClick={() => handleDownload(0.25, 'low')}
               >
-                Low
-              </a>
-              <a
-                ref={mediumRef}
+                <span>Low</span>
+                <FontAwesomeIcon
+                  icon="download"
+                  className={styles.collageLinkIcon}
+                />
+              </button>
+              <button
                 className={styles.collageLink}
-                href=""
-                download="collage_medium.png"
+                onClick={() => handleDownload(0.5, 'medium')}
               >
-                Medium
-              </a>
-              <a
-                ref={highRef}
+                <span>Medium</span>
+                <FontAwesomeIcon
+                  icon="download"
+                  className={styles.collageLinkIcon}
+                />
+              </button>
+              <button
                 className={styles.collageLink}
-                href=""
-                download="collage_high.png"
+                onClick={() => handleDownload(1, 'high')}
               >
-                High
-              </a>
+                <span>High</span>
+                <FontAwesomeIcon
+                  icon="download"
+                  className={styles.collageLinkIcon}
+                />
+              </button>
             </div>
             <Canvas
               ref={canvasRef}

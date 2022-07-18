@@ -14,15 +14,46 @@
 }
 
 .collageLinks {
+  width: 100%;
+  max-width: 80%;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   column-gap: 35px;
 }
 
 .collageLink {
-  text-decoration: underline;
-  color: #037af4;
+  appearance: none;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  background-color: #fff;
+  color: $color-link;
+  font-size: $font-size-s;
   font-weight: $font-weight-semi-bold;
+  cursor: pointer;
+
+  &:active,
+  &:focus,
+  &:hover {
+    outline: 0;
+  }
+
+  span {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.1s ease-in-out;
+  }
+
+  &:hover span {
+    border-color: $color-link;
+  }
+}
+
+.collageLinkIcon {
+  color: $color-link;
+  font-size: $font-size-xs;
 }
 
 .canvas {
@@ -32,13 +63,31 @@
 }
 
 @media #{$max-width-3} {
-  .canvas {
+  .canvas,
+  .collageLinks {
     max-width: 90%;
+  }
+
+  .collageLinks {
+    column-gap: 25px;
+  }
+
+  .container {
+    row-gap: 15px;
   }
 }
 
 @media #{$max-width-1} {
-  .canvas {
+  .canvas,
+  .collageLinks {
     max-width: 100%;
+  }
+
+  .collageLinks {
+    column-gap: 15px;
+  }
+
+  .container {
+    row-gap: 10px;
   }
 }

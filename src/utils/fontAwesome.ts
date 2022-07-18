@@ -4,11 +4,12 @@ import {
   faRightFromBracket,
   faAngleDown,
   faTimes,
+  faDownload,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const registerIcons = (): void => {
   // Add fontawesome icons to the library in order to import just used icons
-  library.add(fab, faRightFromBracket, faAngleDown, faTimes);
+  library.add(fab, faRightFromBracket, faAngleDown, faTimes, faDownload);
   // Disable add automatically the css styles into the <head> for Next.js
   config.autoAddCss = false;
 };
