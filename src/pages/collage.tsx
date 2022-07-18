@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { withIronSessionSsr } from 'iron-session/next';
 import { ParsedUrlQuery } from 'querystring';
 import cx from 'classnames';
@@ -19,6 +20,7 @@ import { CollageFilters } from '@customTypes/collage';
 import styles from '@styles/pages/Collage.module.scss';
 import Spinner from '@components/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Button from '@components/Button';
 
 interface CollagePageProps {
   user: User | null;
@@ -32,6 +34,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
   const [base64Canvas, setBase64Canvas] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const router = useRouter();
 
   const hasAlbums = useMemo(() => albums.length > 0, [albums]);
   const dimensions = useMemo(
@@ -79,10 +82,9 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     };
 
     getTopAlbums();
-  }, []);
+  }, [filters]);
 
   const handleDraw = useCallback(() => {
-    console.log(handleDraw);
     if (!canvasRef.current) return;
 
     const context = canvasRef.current.getContext('2d');
@@ -124,6 +126,11 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     [base64Canvas, dimensions]
   );
 
+  const handleShuffle = useCallback(() => {
+    const { pathname, search } = window.location;
+    router.push(`${pathname}${search}`, undefined, { shallow: false });
+  }, [router]);
+
   useEffect(() => {
     imagesLoaded &&
       setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
@@ -143,37 +150,41 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
         {loading && <Spinner />}
         {!loading && hasAlbums && (
           <>
-            <div className={styles.collageLinks}>
-              <button
-                className={styles.collageLink}
-                onClick={() => handleDownload(0.25, 'low')}
-              >
-                <span>Low</span>
-                <FontAwesomeIcon
-                  icon="download"
-                  className={styles.collageLinkIcon}
-                />
-              </button>
-              <button
-                className={styles.collageLink}
-                onClick={() => handleDownload(0.5, 'medium')}
-              >
-                <span>Medium</span>
-                <FontAwesomeIcon
-                  icon="download"
-                  className={styles.collageLinkIcon}
-                />
-              </button>
-              <button
-                className={styles.collageLink}
-                onClick={() => handleDownload(1, 'high')}
-              >
-                <span>High</span>
-                <FontAwesomeIcon
-                  icon="download"
-                  className={styles.collageLinkIcon}
-                />
-              </button>
+            <div className={styles.collageSubHeader}>
+              <Button onClick={() => handleShuffle()}>Shuffle</Button>
+
+              <div className={styles.collageLinks}>
+                <button
+                  className={styles.collageLink}
+                  onClick={() => handleDownload(0.25, 'low')}
+                >
+                  <span>Low</span>
+                  <FontAwesomeIcon
+                    icon="download"
+                    className={styles.collageLinkIcon}
+                  />
+                </button>
+                <button
+                  className={styles.collageLink}
+                  onClick={() => handleDownload(0.5, 'medium')}
+                >
+                  <span>Medium</span>
+                  <FontAwesomeIcon
+                    icon="download"
+                    className={styles.collageLinkIcon}
+                  />
+                </button>
+                <button
+                  className={styles.collageLink}
+                  onClick={() => handleDownload(1, 'high')}
+                >
+                  <span>High</span>
+                  <FontAwesomeIcon
+                    icon="download"
+                    className={styles.collageLinkIcon}
+                  />
+                </button>
+              </div>
             </div>
             <Canvas
               ref={canvasRef}

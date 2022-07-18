@@ -6,20 +6,28 @@
   align-items: center;
   justify-content: center;
   row-gap: 20px;
-  padding: 20px 0;
+  padding: 20px 32px;
 
   &Loading {
     height: 100%;
   }
 }
 
-.collageLinks {
+.collageSubHeader {
   width: 100%;
-  max-width: 80%;
+  max-width: 1400px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  column-gap: 35px;
+  row-gap: 10px;
+  flex-wrap: wrap;
+}
+
+.collageLinks {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  column-gap: 35px;
+  column-gap: 25px;
 }
 
 .collageLink {
@@ -59,28 +67,17 @@
 .canvas {
   width: 100%;
   height: 100%;
-  max-width: 80%;
+  max-width: 1400px;
 }
 
 @media #{$max-width-3} {
   .canvas,
-  .collageLinks {
+  .collageSubHeader {
     max-width: 90%;
   }
 
-  .collageLinks {
-    column-gap: 25px;
-  }
-
-  .container {
-    row-gap: 15px;
-  }
-}
-
-@media #{$max-width-1} {
-  .canvas,
-  .collageLinks {
-    max-width: 100%;
+  .collageSubHeader button:not(.collageLink) {
+    padding: 5px 18px;
   }
 
   .collageLinks {
@@ -88,6 +85,23 @@
   }
 
   .container {
+    row-gap: 15px;
+    padding: 20px 16px;
+  }
+}
+
+@media #{$max-width-1} {
+  .canvas,
+  .collageSubHeader {
+    max-width: 100%;
+  }
+
+  .collageLinks {
+    column-gap: 10px;
+  }
+
+  .container {
     row-gap: 10px;
+    padding: 20px 0;
   }
 }

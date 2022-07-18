@@ -15,6 +15,7 @@
     linear-gradient($color-primary, $color-primary-dark);
   border: 1px solid $border-color-primary;
   border-bottom: 1px solid $border-color-primary-dark;
+  z-index: 11;
 }
 
 .title {
