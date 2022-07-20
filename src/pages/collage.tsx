@@ -55,6 +55,10 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     [styles.containerLoading]: loading,
   });
 
+  const collageSubHeaderClasses = cx(styles.collageSubHeader, {
+    [styles.collageSubHeaderWithButton]: !!filters.shuffle,
+  });
+
   useEffect(() => {
     const getTopAlbums = async () => {
       setLoading(true);
@@ -83,6 +87,11 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
 
     getTopAlbums();
   }, [filters]);
+
+  useEffect(() => {
+    imagesLoaded &&
+      setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
+  }, [imagesLoaded]);
 
   const handleDraw = useCallback(() => {
     if (!canvasRef.current) return;
@@ -131,11 +140,6 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     router.push(`${pathname}${search}`, undefined, { shallow: false });
   }, [router]);
 
-  useEffect(() => {
-    imagesLoaded &&
-      setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
-  }, [imagesLoaded]);
-
   return (
     <>
       <Head>
@@ -150,8 +154,10 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
         {loading && <Spinner />}
         {!loading && hasAlbums && (
           <>
-            <div className={styles.collageSubHeader}>
-              <Button onClick={() => handleShuffle()}>Shuffle</Button>
+            <div className={collageSubHeaderClasses}>
+              {filters.shuffle && (
+                <Button onClick={() => handleShuffle()}>Shuffle</Button>
+              )}
 
               <div className={styles.collageLinks}>
                 <button

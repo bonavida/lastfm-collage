@@ -42,6 +42,14 @@
   }
 }
 
+.formFieldInline {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 30px;
+  row-gap: 20px;
+}
+
 .formFieldHorizontal {
   display: flex;
   column-gap: 15px;

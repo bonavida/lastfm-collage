@@ -32,6 +32,7 @@ interface FormValues {
   height: string;
   period: string;
   shuffle: boolean;
+  skipDuplicates: boolean;
   otherUser: boolean;
   username: string;
 }
@@ -48,13 +49,14 @@ const Home: NextPage<IndexPageProps> = () => {
       method: DEFAULT_LASTFM_METHOD,
       period: DEFAULT_LASTFM_PERIOD,
       shuffle: true,
+      skipDuplicates: true,
     },
   });
 
   const isOtherUserSelected = watch('otherUser');
 
   const handleSubmitForm: SubmitHandler<FormValues> = (
-    { shuffle, otherUser, username, ...data },
+    { shuffle, skipDuplicates, otherUser, username, ...data },
     event
   ) => {
     event?.preventDefault();
@@ -64,6 +66,7 @@ const Home: NextPage<IndexPageProps> = () => {
     const params = {
       ...data,
       ...(shuffle && { shuffle: '1' }),
+      ...(skipDuplicates && { skipDuplicates: '1' }),
       ...(otherUser && { username }),
     };
 
@@ -164,13 +167,22 @@ const Home: NextPage<IndexPageProps> = () => {
               />
             </div>
           </div>
-          <div className={styles.formField}>
+          <div className={`${styles.formField} ${styles.formFieldInline}`}>
             <Controller
               control={control}
               name="shuffle"
               render={({ field: { value, onChange } }) => (
                 <Switch name="shuffle" value={value} onChange={onChange}>
                   Shuffle
+                </Switch>
+              )}
+            />
+            <Controller
+              control={control}
+              name="skipDuplicates"
+              render={({ field: { value, onChange } }) => (
+                <Switch name="skipDuplicates" value={value} onChange={onChange}>
+                  Skip possible duplicates
                 </Switch>
               )}
             />
@@ -225,7 +237,7 @@ const Home: NextPage<IndexPageProps> = () => {
             max-width: 700px;
             display: flex;
             flex-direction: column;
-            row-gap: 30px;
+            row-gap: 40px;
           }
         `}
       </style>

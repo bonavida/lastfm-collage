@@ -36,6 +36,7 @@ export interface Filters {
   period: Period;
   limit: number;
   shuffle?: boolean;
+  skipDuplicates?: boolean;
 }
 
 export interface ParamFilters {

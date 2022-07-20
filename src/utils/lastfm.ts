@@ -32,7 +32,10 @@ export const getLargestImage = (images: Image[] = []) =>
     {} as Image
   );
 
-export const parseTopAlbums = (albums: ResponseAlbum[]): Album[] =>
+export const parseTopAlbums = (
+  albums: ResponseAlbum[],
+  skipDuplicates: boolean = false
+): Album[] =>
   albums
     .map(
       ({
@@ -51,4 +54,7 @@ export const parseTopAlbums = (albums: ResponseAlbum[]): Album[] =>
         url,
       })
     )
-    .filter(({ image }: Album) => image);
+    .filter(
+      ({ image, url }: Album) =>
+        image && (!skipDuplicates || !url.includes('+noredirect'))
+    );

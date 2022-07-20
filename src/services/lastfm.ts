@@ -83,7 +83,7 @@ const getPaginatedUserTopAlbums = async (
 export const getUserTopAlbums = async (
   username: string,
   sessionKey: string,
-  { limit, shuffle, ...filters }: Filters
+  { limit, shuffle, skipDuplicates, ...filters }: Filters
 ): Promise<Album[]> => {
   const albums: Album[] = [];
   const currentFilters = {
@@ -95,7 +95,10 @@ export const getUserTopAlbums = async (
     const remaining = limit - albums.length;
     const { album: topalbums, ['@attr']: attr } =
       await getPaginatedUserTopAlbums(username, sessionKey, currentFilters);
-    const filteredAlbums = parseTopAlbums(topalbums).slice(0, remaining);
+    const filteredAlbums = parseTopAlbums(topalbums, skipDuplicates).slice(
+      0,
+      remaining
+    );
     albums.push(...filteredAlbums);
     if (parseInt(attr.total, 10) < limit) break;
     currentFilters.page = `${parseInt(currentFilters.page, 10) + 1}`;
