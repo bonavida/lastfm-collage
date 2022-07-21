@@ -33,6 +33,20 @@ export const shuffleArray = (array: Array<any>): Array<any> => {
 };
 
 /**
+ * Load image from a url
+ * @param url String with the image URL to be loaded
+ * @returns Promise with the image object
+ */
+export const loadImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = '*';
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error(`Load ${url} fail`));
+    img.src = url;
+  });
+
+/**
  * Get base64 encoded image from a canvas
  * @param canvas Canvas to be drawn on
  * @param quality Quality of the image

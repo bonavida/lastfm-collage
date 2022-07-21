@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import type { NextPage, GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { withIronSessionSsr } from 'iron-session/next';
 import { ParsedUrlQuery } from 'querystring';
 import cx from 'classnames';
@@ -11,7 +10,12 @@ import Canvas from '@components/Canvas';
 import { sessionOptions } from '@constants/session';
 import { CANVAS_ITEM_SIZE } from '@constants/canvas';
 /** Utils */
-import { getImageFromCanvas, resizeBase64Img } from '@utils/common';
+import {
+  loadImage,
+  getImageFromCanvas,
+  resizeBase64Img,
+  shuffleArray,
+} from '@utils/common';
 /** Types */
 import { User } from '@customTypes/auth';
 import { Album } from '@customTypes/album';
@@ -31,10 +35,8 @@ interface CollagePageProps {
 const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
   const [base64Canvas, setBase64Canvas] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const router = useRouter();
 
   const hasAlbums = useMemo(() => albums.length > 0, [albums]);
   const dimensions = useMemo(
@@ -89,35 +91,31 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   }, [filters]);
 
   useEffect(() => {
-    imagesLoaded &&
-      setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
-  }, [imagesLoaded]);
+    handleDraw();
+  }, [albums]);
 
   const handleDraw = useCallback(() => {
     if (!canvasRef.current) return;
 
     const context = canvasRef.current.getContext('2d');
-    let x = 0;
-    let y = 0;
-    let loadedImages = 0;
 
-    albums.forEach(({ image }) => {
-      const myImage = new Image();
-      myImage.crossOrigin = '*';
-      myImage.onload = () => {
-        context?.drawImage(myImage, x, y);
-        x += CANVAS_ITEM_SIZE;
-        if (x >= dimensions.width) {
-          x = 0;
-          y += CANVAS_ITEM_SIZE;
-        }
-        if (++loadedImages === albums.length) {
-          setImagesLoaded(true);
-        }
-      };
-      myImage.src = image;
+    albums.forEach(async ({ image }, index) => {
+      const myImage = await loadImage(image);
+      const width = parseInt(filters?.width ?? '0', 10);
+      const column = index % width;
+      const row = width ? Math.floor(index / width) : 0;
+
+      context?.drawImage(
+        myImage,
+        column * CANVAS_ITEM_SIZE,
+        row * CANVAS_ITEM_SIZE
+      );
+
+      if (index === albums.length - 1) {
+        setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
+      }
     });
-  }, [albums, dimensions]);
+  }, [albums, filters]);
 
   const handleDownload = useCallback(
     (quality: number, partialText: string) => {
@@ -136,9 +134,8 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   );
 
   const handleShuffle = useCallback(() => {
-    const { pathname, search } = window.location;
-    router.push(`${pathname}${search}`, undefined, { shallow: false });
-  }, [router]);
+    setAlbums(shuffleArray(albums));
+  }, [albums]);
 
   return (
     <>
