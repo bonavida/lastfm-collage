@@ -99,21 +99,22 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
 
     const context = canvasRef.current.getContext('2d');
 
-    albums.forEach(async ({ image }, index) => {
-      const myImage = await loadImage(image);
-      const width = parseInt(filters?.width ?? '0', 10);
-      const column = index % width;
-      const row = width ? Math.floor(index / width) : 0;
+    const imgPromises = albums.map(({ image: imageURL }, index) =>
+      loadImage(imageURL).then((image) => {
+        const width = parseInt(filters?.width ?? '0', 10);
+        const column = index % width;
+        const row = width ? Math.floor(index / width) : 0;
 
-      context?.drawImage(
-        myImage,
-        column * CANVAS_ITEM_SIZE,
-        row * CANVAS_ITEM_SIZE
-      );
+        context?.drawImage(
+          image,
+          column * CANVAS_ITEM_SIZE,
+          row * CANVAS_ITEM_SIZE
+        );
+      })
+    );
 
-      if (index === albums.length - 1) {
-        setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
-      }
+    Promise.allSettled(imgPromises).then(() => {
+      setBase64Canvas(getImageFromCanvas(canvasRef.current, 1) ?? '');
     });
   }, [albums, filters]);
 
