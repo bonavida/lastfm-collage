@@ -8,7 +8,7 @@ import cx from 'classnames';
 import Canvas from '@components/Canvas';
 /** Constants */
 import { sessionOptions } from '@constants/session';
-import { CANVAS_ITEM_SIZE } from '@constants/canvas';
+import { CANVAS_ITEM_SIZE, CANVAS_IMAGE_QUALITIES } from '@constants/canvas';
 /** Utils */
 import {
   loadImage,
@@ -19,7 +19,7 @@ import {
 /** Types */
 import { User } from '@customTypes/auth';
 import { Album } from '@customTypes/album';
-import { CollageFilters } from '@customTypes/collage';
+import { CollageFilters, CollageImageBuffers } from '@customTypes/collage';
 /** Styles */
 import styles from '@styles/pages/Collage.module.scss';
 import Spinner from '@components/Spinner';
@@ -36,6 +36,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [base64Canvas, setBase64Canvas] = useState<string>('');
+  const [imageBuffers, setImageBuffers] = useState<CollageImageBuffers>({});
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const hasAlbums = useMemo(() => albums.length > 0, [albums]);
@@ -118,20 +119,31 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
     });
   }, [albums, filters]);
 
+  useEffect(() => {
+    const tempImageBuffers: CollageImageBuffers = {};
+    const { width, height } = dimensions;
+
+    const imageResizePromises = CANVAS_IMAGE_QUALITIES.map(([key, value]) =>
+      resizeBase64Img(base64Canvas, width * value, height * value).then(
+        (resizedImg: string) => {
+          tempImageBuffers[key] = resizedImg;
+        }
+      )
+    );
+
+    Promise.allSettled(imageResizePromises).then(() => {
+      setImageBuffers(tempImageBuffers);
+    });
+  }, [base64Canvas, dimensions]);
+
   const handleDownload = useCallback(
-    (quality: number, partialText: string) => {
-      resizeBase64Img(
-        base64Canvas,
-        dimensions.width * quality,
-        dimensions.height * quality
-      ).then((resizedImg: string) => {
-        const link = document.createElement('a');
-        link.href = resizedImg;
-        link.download = `collage_${partialText}.png`;
-        link.click();
-      });
+    (quality: string) => {
+      const link = document.createElement('a');
+      link.href = imageBuffers[quality];
+      link.download = `collage_${quality}.png`;
+      link.click();
     },
-    [base64Canvas, dimensions]
+    [imageBuffers]
   );
 
   const handleShuffle = useCallback(() => {
@@ -160,7 +172,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
               <div className={styles.collageLinks}>
                 <button
                   className={styles.collageLink}
-                  onClick={() => handleDownload(0.25, 'low')}
+                  onClick={() => handleDownload('low')}
                 >
                   <span>Low</span>
                   <FontAwesomeIcon
@@ -170,7 +182,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
                 </button>
                 <button
                   className={styles.collageLink}
-                  onClick={() => handleDownload(0.5, 'medium')}
+                  onClick={() => handleDownload('medium')}
                 >
                   <span>Medium</span>
                   <FontAwesomeIcon
@@ -180,7 +192,7 @@ const Collage: NextPage<CollagePageProps> = ({ user, sessionKey, filters }) => {
                 </button>
                 <button
                   className={styles.collageLink}
-                  onClick={() => handleDownload(1, 'high')}
+                  onClick={() => handleDownload('high')}
                 >
                   <span>High</span>
                   <FontAwesomeIcon

@@ -6,3 +6,7 @@ export interface CanvasDimensions {
 export interface CollageFilters {
   [key: string]: string;
 }
+
+export interface CollageImageBuffers {
+  [key: string]: string;
+}
